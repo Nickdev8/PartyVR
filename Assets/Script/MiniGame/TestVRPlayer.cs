@@ -8,7 +8,7 @@ public class TestVRPlayer : NetworkBehaviour
     public Team CurrentTeam => _currentTeam.Value;
 
     [ServerRpc]
-    public void SetTeamServer(Team team)
+    public void SetTeamServerRpc(Team team)
     {
         // Server authority - only the server can change the team
         _currentTeam.Value = team;

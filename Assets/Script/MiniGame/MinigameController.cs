@@ -23,7 +23,7 @@ public class MinigameController : NetworkBehaviour
     public void InitializeGame()
     {
         AssignPlayers();
-        SpawnObjects();
+        SpawnObjectsServerRpc();
         OnGameStart?.Invoke();
         StartCoroutine(GameLoop());
     }
@@ -36,24 +36,24 @@ public class MinigameController : NetworkBehaviour
         if (TeamMode)
         {
             int teamASize = Mathf.RoundToInt(_players.Count * TeamSplitRatio);
-            SplitTeams(teamASize);
+            SplitTeamsServerRpc(teamASize);
         }
     }
 
     [ServerRpc]
-    private void SplitTeams(int teamASize)
+    private void SplitTeamsServerRpc(int teamASize)
     {
         // Shuffle and split players
         _players = _players.OrderBy(x => Random.value).ToList();
 
         for (int i = 0; i < _players.Count; i++)
         {
-            _players[i].SetTeamServer(i < teamASize ? Team.A : Team.B);
+            _players[i].SetTeamServerRpc(i < teamASize ? Team.A : Team.B);
         }
     }
 
     [ServerRpc]
-    private void SpawnObjects()
+    private void SpawnObjectsServerRpc()
     {
         foreach (var obj in CustomObjects)
         {
@@ -66,11 +66,11 @@ public class MinigameController : NetworkBehaviour
     {
         yield return new WaitForSeconds(gameTime);
 
-        EndGame();
+        EndGameServerRpc();
     }
 
     [ServerRpc]
-    public void EndGame()
+    public void EndGameServerRpc()
     {
         OnGameEnd?.Invoke();
         MinigameManager.Instance.StartNextGameServerRpc();
