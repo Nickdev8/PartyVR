@@ -35,7 +35,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3476897355692818291}
@@ -54,7 +54,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: e9b4b64f-1c7e-4dff-8f3c-ce409bdc3951
-  instanceId: 79f9f28f-3c14-4080-bbda-2ff42236cd32
+  instanceId: a4b01b3f-ea35-4cfe-98e3-7da01c49fa3e
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: d5c83ff6-47e4-4c98-acdd-041d4686912f
@@ -70,7 +70,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7598288188305066296}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 1225623141052028468, guid: 8ed758d05963a9245a279866530caf50, type: 3}
 --- !u!23 &1371343607672157050
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -91,7 +91,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 15b1d5ff3d274694e8d0c6cb466a4ae6, type: 2}
+  - {fileID: -876546973899608171, guid: 8ed758d05963a9245a279866530caf50, type: 3}
+  - {fileID: -6478536213147159724, guid: 8ed758d05963a9245a279866530caf50, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -132,7 +133,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2, y: 2, z: 2}
+  m_Size: {x: 0.15, y: 0.15, z: 0.15}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &3995668608839865369
 Rigidbody:
@@ -186,8 +187,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1826351669
-  InScenePlacedSourceGlobalObjectIdHash: 0
+  GlobalObjectIdHash: 2012709959
+  InScenePlacedSourceGlobalObjectIdHash: 1826351669
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -250,6 +251,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: '[BuildingBlock] DistanceNetworkedHandGrab'
+      objectReference: {fileID: 0}
+    - target: {fileID: 2183298304303599177, guid: cf03cb1ede8bbca49b7020e94b347d64,
+        type: 3}
+      propertyPath: instanceId
+      value: 56c1adc6-c5e8-49f5-9a48-21c80af76c2b
       objectReference: {fileID: 0}
     - target: {fileID: 2302894765792939397, guid: cf03cb1ede8bbca49b7020e94b347d64,
         type: 3}
