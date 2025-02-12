@@ -3548,6 +3548,18 @@ MonoBehaviour:
   _hmd: {fileID: 527555947}
   _offset: {x: 0, y: 0, z: 0}
   _rotation: {x: 0, y: 0, z: 0, w: 1}
+--- !u!114 &159299721 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8570272280915030565, guid: 3215938aace61b740b9c7bca06f19f11,
+    type: 3}
+  m_PrefabInstance: {fileID: 108130438}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71c591ff029c5744fab32050a9c97f54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &159728594
 GameObject:
   m_ObjectHideFlags: 0
@@ -6308,6 +6320,7 @@ GameObject:
   - component: {fileID: 256587699}
   - component: {fileID: 256587700}
   - component: {fileID: 256587698}
+  - component: {fileID: 256587701}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -6327,11 +6340,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 549da470a21a4b7499669755e25b036f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Health:
+  health:
     m_InternalValue: 100
-  ListPrefab: {fileID: 4377183511784826484, guid: 5254688da7ddfa7428e341d80609dd2e,
-    type: 3}
-  IsDead: 0
+  isDead: 0
 --- !u!4 &256587699
 Transform:
   m_ObjectHideFlags: 0
@@ -6369,6 +6380,24 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+--- !u!114 &256587701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 256587697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6acbf56dc486dd4b90d7e9660b52a33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  listPrefab: {fileID: 4377183511784826484, guid: 5254688da7ddfa7428e341d80609dd2e,
+    type: 3}
+  currentHostListPosition: 0
+  listText:
+  - Make me Smile
+  - Go Fuck yourself
 --- !u!1 &257212554
 GameObject:
   m_ObjectHideFlags: 0
@@ -10457,15 +10486,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _buttonClickActions:
-  - Title: 
+  - Title: Go next in Hosts list
     Button: 1
     ButtonMode: 1
     Callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 256587698}
-          m_TargetAssemblyTypeName: PlayerNetwork, Assembly-CSharp
+        - m_Target: {fileID: 256587701}
+          m_TargetAssemblyTypeName: HostList, Assembly-CSharp
           m_MethodName: NextInHostsList
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - Title: Grab
+    Button: 6316032
+    ButtonMode: 1
+    Callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 159299721}
+          m_TargetAssemblyTypeName: Meta.XR.MultiplayerBlocks.NGO.TransferOwnershipNGO,
+            Meta.XR.MultiplayerBlocks.NGO
+          m_MethodName: TransferOwnershipToLocalPlayer
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}

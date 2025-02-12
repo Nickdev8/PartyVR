@@ -1,32 +1,20 @@
 using System;
+using System.Collections.Generic;
+using TMPro;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PlayerNetwork : NetworkBehaviour
 {
+    [Header("Player Variables:")]
     // A networked health value (default 100).
-    public NetworkVariable<int> Health = new NetworkVariable<int>(100);
-
-    // Prefab to be instantiated.
-    public GameObject ListPrefab;
-
-    // Flag to avoid processing death multiple times.
+    public NetworkVariable<int> health = new NetworkVariable<int>(100);
+    
+    
     [HideInInspector]
-    public bool IsDead = false;
-
-    // Reference to the OVRCameraRig (assumed to be in the scene).
-    private OVRCameraRig _cameraRig;
-
-    // Holds the instantiated ListPrefab.
-    private GameObject listInstance;
-
-    private void Awake()
-    {
-        // Finds the first OVRCameraRig in the scene.
-        _cameraRig = FindAnyObjectByType<OVRCameraRig>();
-    }
-
-    // Called once the network object is fully spawned.
+    public bool isDead = false;
+    
     public override void OnNetworkSpawn()
     {
         if (IsServer)
@@ -51,6 +39,15 @@ public class PlayerNetwork : NetworkBehaviour
         }
     }
 
+    public override void OnNetworkDespawn()
+    {
+        if (IsServer && SceneNetworkManager.Instance != null)
+        {
+            SceneNetworkManager.Instance.UnregisterPlayer(this);
+        }
+    }
+    
+
     /// <summary>
     /// Reduces the player's health by the given damage amount.
     /// This should only be called on the server.
@@ -60,68 +57,11 @@ public class PlayerNetwork : NetworkBehaviour
         if (!IsServer)
             return;
 
-        Health.Value -= damage;
-        if (Health.Value <= 0)
+        health.Value -= damage;
+        if (health.Value <= 0)
         {
-            Health.Value = 0;
+            health.Value = 0;
             // Optionally add additional death logic here.
         }
-    }
-
-    // Called when the network object is despawned.
-    public override void OnNetworkDespawn()
-    {
-        if (IsServer && SceneNetworkManager.Instance != null)
-        {
-            SceneNetworkManager.Instance.UnregisterPlayer(this);
-        }
-    }
-
-    private void Update()
-    {
-        DoListOnHost();
-    }
-
-    /// <summary>
-    /// Instantiates the ListPrefab as a child of _cameraRig.rightControllerAnchor if not already instantiated.
-    /// This runs only on the server.
-    /// </summary>
-    private void DoListOnHost()
-    {
-        if (IsServer)
-        {
-            // Only instantiate once.
-            if (listInstance == null)
-            {
-                if (_cameraRig != null && _cameraRig.rightControllerAnchor != null)
-                {
-                    // Instantiate ListPrefab as a child of rightControllerAnchor.
-                    listInstance = Instantiate(ListPrefab, _cameraRig.rightControllerAnchor);
-
-                    // Reset local position/rotation if needed.
-                    listInstance.transform.localPosition = Vector3.zero;
-                    listInstance.transform.localRotation = Quaternion.identity;
-
-                    Debug.Log("ListPrefab instantiated as child of rightControllerAnchor.");
-                }
-                else
-                {
-                    Debug.LogError("OVRCameraRig or rightControllerAnchor is null.");
-                }
-            }
-        }
-    }
-
-    public void NextInHostsList()
-    {
-        Debug.Log("Pressed A");
-    }
-
-    /// <summary>
-    /// Provides access to the instantiated list instance.
-    /// </summary>
-    public GameObject GetListInstance()
-    {
-        return listInstance;
     }
 }

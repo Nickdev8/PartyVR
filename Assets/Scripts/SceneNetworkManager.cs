@@ -86,13 +86,13 @@ public class SceneNetworkManager : NetworkBehaviour
     /// If a player’s health is zero or below and they are not already marked as dead,
     /// they are added to the appropriate dead team list.
     /// </summary>
-    public void CheckPlayerHealth()
+    private void CheckPlayerHealth()
     {
         foreach (var player in allPlayers)
         {
-            if (player.Health.Value <= 0 && !player.IsDead)
+            if (player.health.Value <= 0 && !player.isDead)
             {
-                player.IsDead = true;
+                player.isDead = true;
 
                 if (team1Players.Contains(player))
                 {
