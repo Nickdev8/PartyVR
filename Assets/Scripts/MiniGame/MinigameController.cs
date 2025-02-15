@@ -78,7 +78,7 @@ public class MinigameController : NetworkBehaviour
     }
 
     [ServerRpc]
-    public void CancelGame()
+    public void CancelGameServerRpc()
     {
         Destroy(this.gameObject);
     }

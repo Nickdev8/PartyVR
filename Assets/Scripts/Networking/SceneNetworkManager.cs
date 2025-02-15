@@ -55,7 +55,7 @@ public class SceneNetworkManager : NetworkBehaviour
         {
             if (playerNetwork.health.Value <= 0 && !playerNetwork.isDead)
             {
-                MinigameManager.Instance.CheckPlayerCount(playerNetwork.CurrentTeam);
+                MinigameManager.Instance.CheckPlayerCountServerRpc(playerNetwork.CurrentTeam);
         
                 playerNetwork.isDead = true;
                 playerNetwork.SetTeamServerRpc(Team.Dead);
@@ -79,6 +79,6 @@ public class SceneNetworkManager : NetworkBehaviour
                 }
             }
         }
-
+        return playerNetworks;
     }
 }

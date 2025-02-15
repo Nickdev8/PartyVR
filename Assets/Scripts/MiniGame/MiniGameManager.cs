@@ -38,7 +38,7 @@ public class MinigameManager : NetworkBehaviour
         _minigameQueue.RemoveAt(0);
         
         // Cancels miniGame checks are not suffient
-        if (!CheckMinigame()){ _currentController.CancelGame(); return;}
+        if (!CheckMinigame()){ _currentController.CancelGameServerRpc(); return;}
         
         // Initialize game
         _currentController.InitializeGame();
@@ -55,7 +55,7 @@ public class MinigameManager : NetworkBehaviour
     }
     
     [ServerRpc]
-    public void CheckPlayerCount(Team team)
+    public void CheckPlayerCountServerRpc(Team team)
     {
         foreach (var playerId in SceneNetworkManager.Instance.CurrentPlayerIds)
         {
