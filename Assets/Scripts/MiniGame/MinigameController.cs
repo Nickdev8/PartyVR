@@ -13,6 +13,7 @@ public class MinigameController : NetworkBehaviour
     public Transform[] SpawnPoints;
     public List<NetworkObject> CustomObjects;
     public float gameTime;
+    public int minimumPlayerCount;
 
     [Header("Events")]
     public UnityEvent OnGameStart;
@@ -74,5 +75,11 @@ public class MinigameController : NetworkBehaviour
     {
         OnGameEnd?.Invoke();
         MinigameManager.Instance.StartNextGameServerRpc();
+    }
+
+    [ServerRpc]
+    public void CancelGame()
+    {
+        Destroy(this.gameObject);
     }
 }

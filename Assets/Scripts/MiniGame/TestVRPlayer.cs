@@ -1,6 +1,10 @@
 using UnityEngine;
 using Unity.Netcode;
-
+/*
+ * script is no longer used
+ * please use PlayerNetwork.cs
+ * 
+ */
 public class TestVRPlayer : NetworkBehaviour
 {
     private readonly NetworkVariable<Team> _currentTeam = new NetworkVariable<Team>();
@@ -26,5 +30,3 @@ public class TestVRPlayer : NetworkBehaviour
         Debug.Log($"Player {OwnerClientId} team changed to {current}"); // TODO: Change to UI stuff later
     }
 }
-
-public enum Team { A, B }
