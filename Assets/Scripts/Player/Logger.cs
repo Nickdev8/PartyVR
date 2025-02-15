@@ -2,17 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using System.Linq;
 
 public class Logger : MonoBehaviour
 {
-    // Assign this in the Inspector with your TextMeshProUGUI component
     public TMP_Text textLogComponent;
-
+    public Transform cameraAnchor;
+    
     // List to keep track of log messages
     private List<string> _logMessages = new List<string>();
+    
+    // follow the camara
+    private void LateUpdate () {
+        transform.position = Vector3.Lerp(transform.position, cameraAnchor.position, Time.deltaTime * 100);
+        transform.rotation = Quaternion.Lerp(transform.rotation, cameraAnchor.rotation, Time.deltaTime * 100);
+    }
 
-    // Call this method to add a log entry
     public void AddLog(string message)
     {
         StartCoroutine(Log(message));
@@ -24,7 +28,6 @@ public class Logger : MonoBehaviour
         _logMessages.Add(message);
         UpdatePlayerLog();
 
-        // Wait for 2 seconds before removing this message
         yield return new WaitForSeconds(2f);
 
         // Remove the message (removes the first occurrence)
@@ -32,7 +35,6 @@ public class Logger : MonoBehaviour
         UpdatePlayerLog();
     }
 
-    // Update the TextMeshProUGUI component based on current messages
     private void UpdatePlayerLog()
     {
         textLogComponent.text = string.Join("\n", _logMessages.ToArray());
