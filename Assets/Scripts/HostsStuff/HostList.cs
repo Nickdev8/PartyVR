@@ -143,6 +143,7 @@ public class HostList : NetworkBehaviour
             // 1 = set corner 2
             // 2 aks player if random teams or determent by line
             
+            /*
             if (_currentHostListPosition == 2);
             {
                 if (MinigameManager.Instance.currentController.teamMode == false) _currentHostListPosition = 4;
@@ -157,6 +158,7 @@ public class HostList : NetworkBehaviour
             }
             
             if (_currentHostListPosition == 3) MinigameManager.Instance.StartNextGameServerRpc();
+            */
                 
             UpdatelistText(); 
         }
@@ -168,7 +170,8 @@ public class HostList : NetworkBehaviour
 
         if (_currentHostListPosition != 2) return;
         _listPrefabTextComp.color = Color.white;
-
+        
+        /*
         int currentTeamSizeA = 0;
         int teamSizeA = Mathf.CeilToInt(SceneNetworkManager.Instance.currentPlayerNetworks.Count * MinigameManager.Instance.currentController.teamSplitRatio);
         while (currentTeamSizeA != teamSizeA)
@@ -187,6 +190,8 @@ public class HostList : NetworkBehaviour
                     player.playerLog.AddLog($"Team B has too many players, \n {teamSizeA - currentTeamSizeA} players need to go to the other side");
             }
         }
+        */
+        
     }
     public void PressedXDown()
     {
@@ -383,8 +388,8 @@ public class HostList : NetworkBehaviour
     
     void MoveMinigameController()
     {
-        MinigameManager.Instance.currentController.transform.localScale = new Vector3(
-            Vector3.Distance(corner1, corner4), 1, 
-            Vector3.Distance(corner2, corner4));
+        //MinigameManager.Instance.currentController.transform.localScale = new Vector3(
+        //    Vector3.Distance(corner1, corner4), 1, 
+        //    Vector3.Distance(corner2, corner4));
     }
 }
