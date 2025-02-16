@@ -27,27 +27,28 @@ public class PlayerNetwork : NetworkBehaviour
         // Automatically react to team changes
         _currentTeam.OnValueChanged += OnTeamChanged;
         
-        if (IsServer)
-        {
-            if (SceneNetworkManager.Instance != null)
-            {
-                SceneNetworkManager.Instance.RegisterPlayerServerRpc(NetworkManager.Singleton.LocalClientId);
-
-                Debug.Log($"Added player {gameObject.name} to server");
-            }
-            else
-            {
-                Debug.LogError("SceneNetworkManager.Instance is null. Make sure the SceneNetworkManager is in the scene and active.");
-            }
-        }
+        //if (IsServer)
+        //{
+            //if (SceneNetworkManager.Instance != null)
+            //{
+            //    SceneNetworkManager.Instance.RegisterPlayerServerRpc(NetworkManager.Singleton.LocalClientId);
+            //
+            //    Debug.Log($"Added player {gameObject.name} to server");
+            //}
+            //else
+            //{
+            //    Debug.LogError("SceneNetworkManager.Instance is null. Make sure the SceneNetworkManager is in the scene and active.");
+            //}
+            
+        //}
     }
 
     public override void OnNetworkDespawn()
     {
-        if (IsServer && SceneNetworkManager.Instance != null)
-        {
-            SceneNetworkManager.Instance.UnregisterPlayerServerRpc(this);
-        }
+        //if (IsServer && SceneNetworkManager.Instance != null)
+        //{
+        //    SceneNetworkManager.Instance.UnregisterPlayerServerRpc(this);
+        //}
     }
     
     [ServerRpc(RequireOwnership = false)]
