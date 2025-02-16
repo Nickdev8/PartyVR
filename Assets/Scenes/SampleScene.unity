@@ -790,7 +790,6 @@ GameObject:
   - component: {fileID: 30720231}
   - component: {fileID: 30720232}
   - component: {fileID: 30720230}
-  - component: {fileID: 30720233}
   m_Layer: 0
   m_Name: 'Game Manager '
   m_TagString: Untagged
@@ -848,20 +847,6 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &30720233
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 30720229}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b72244496bcc214aa30a6d86fb74742, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _minigameQueue: []
-  currentController: {fileID: 0}
 --- !u!1 &30989313
 GameObject:
   m_ObjectHideFlags: 0
@@ -6622,7 +6607,6 @@ GameObject:
   - component: {fileID: 256587700}
   - component: {fileID: 256587698}
   - component: {fileID: 256587701}
-  - component: {fileID: 256587702}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -6711,18 +6695,6 @@ MonoBehaviour:
   sceneCenter: {x: 0, y: 0, z: 0}
   leftSide: {x: 0, y: 0, z: 0}
   rightSide: {x: 0, y: 0, z: 0}
---- !u!114 &256587702
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 256587697}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65793b7c4ab9fa14d89eda9d10322d06, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &257212554
 GameObject:
   m_ObjectHideFlags: 0
@@ -45812,75 +45784,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1597338601}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1905983316
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1905983319}
-  - component: {fileID: 1905983317}
-  - component: {fileID: 1905983320}
-  m_Layer: 0
-  m_Name: MnigameManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1905983317
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1905983316}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 4062498981
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
---- !u!4 &1905983319
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1905983316}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1905983320
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1905983316}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b72244496bcc214aa30a6d86fb74742, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _minigameQueue:
-  - {fileID: 7058778647038694189, guid: 2165094722ec7b5409ef0c2311baf057, type: 3}
-  currentController: {fileID: 0}
 --- !u!1 &1907319867
 GameObject:
   m_ObjectHideFlags: 0
@@ -53485,6 +53388,5 @@ SceneRoots:
   m_Roots:
   - {fileID: 648440694}
   - {fileID: 30720231}
-  - {fileID: 1905983319}
   - {fileID: 2050654069}
   - {fileID: 267070317}
