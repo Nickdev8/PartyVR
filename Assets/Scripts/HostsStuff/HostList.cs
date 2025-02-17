@@ -1,12 +1,10 @@
 using System;
 using TMPro;
 using Unity.Netcode;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class HostList : NetworkBehaviour
 {
-    public static HostList Instance;
     public GameObject listPrefab;
     public GameObject corner1Prefab;
     public GameObject corner2Prefab;
@@ -16,9 +14,10 @@ public class HostList : NetworkBehaviour
     {
         "Set Corner 1",
         "Set Corner 2",
-        "Make Random Teams \n Press X to \n Use sides of the line",
-        "SpawnController",
-        "START THE GAME COUNTDOWN!!", // if changes also change line 146
+        "Confirm Current Players",
+        "Confirm Teams",
+        "Confirm BlockLayoutPositions",
+        "START THE GAME COUNTDOWN!!",
         "",
     };
     
@@ -36,8 +35,6 @@ public class HostList : NetworkBehaviour
     [HideInInspector] public Vector3 corner3;
     [HideInInspector] public Vector3 corner4;
     [HideInInspector] public Vector3 sceneCenter;
-    [HideInInspector] public Vector3 leftSide;
-    [HideInInspector] public Vector3 rightSide;
     private GameObject _oldCorner1Instance;
     private GameObject _oldCorner2Instance;
     
@@ -45,10 +42,14 @@ public class HostList : NetworkBehaviour
     private GameObject _corner3Instance;
     private GameObject _corner4Instance;
 
+    // corner1        //corner2//
+    //
+    //      //sceneCenter//
+    //
+    // //corner4//      corner2
     
     private void Awake()
     {
-        Instance = this;
         _cameraRig = FindAnyObjectByType<OVRCameraRig>();
         
         _starterListText = 
@@ -61,13 +62,8 @@ public class HostList : NetworkBehaviour
     
     private void Update()
     {
-        if (!IsServer) return;
-
         SpawnListOnHost();
         DoSetuplogicUpdate();
-        
-        // turn the list off when not needed anymore
-        _listPrefabTextComp.gameObject.SetActive(_listText[_currentHostListPosition] != string.Empty);
     }
 
     /// <summary>
@@ -127,114 +123,53 @@ public class HostList : NetworkBehaviour
     /// </summary>
     public void NextInHostsListUp()
     {
-        if (!IsServer) return;
-        
-        _listPrefabTextComp.color = Color.white;
-        
-        if (_currentHostListPosition >= _listText.Length)
-            return;
-        
         _currentHostListPosition++;
+        
         Debug.Log("Pressed A to go to next in host list up");
+        _listPrefabTextComp.color = Color.white;
         
         if (_listInstance != null && _listText[_currentHostListPosition] != String.Empty)
         {
             // 0 = set corner 1
             // 1 = set corner 2
-            // 2 aks player if random teams or determent by line
-            
-            if (_currentHostListPosition == 2);
-            {
-                if (MinigameManager.Instance.currentController.teamMode == false) _currentHostListPosition = 4;
-                
-                if (SceneNetworkManager.Instance.PutPlayersInTeams(true) != -1)
-                {
-                    foreach (PlayerNetwork player in SceneNetworkManager.Instance.GetPlayerNetworksServerRpc())
-                    {
-                        player.playerLog.AddLog("Error with random team assignment");
-                    }
-                }
-            }
-            
-            if (_currentHostListPosition == 3) MinigameManager.Instance.StartNextGameServerRpc();
+            if (_currentHostListPosition == 3) ConfirmCurrentPlayers();
+            if (_currentHostListPosition == 4) ConfirmTeams();
+            if (_currentHostListPosition == 5) ConfirmBlockLayoutPositions();
+            if (_currentHostListPosition == 6) StartGame();
                 
             UpdatelistText(); 
         }
     }
-
-    public void PressedXUp()
-    {
-        if (!IsServer) return;
-
-        if (_currentHostListPosition != 2) return;
-        _listPrefabTextComp.color = Color.white;
-
-        int currentTeamSizeA = 0;
-        int teamSizeA = Mathf.CeilToInt(SceneNetworkManager.Instance.currentPlayerNetworks.Count * MinigameManager.Instance.currentController.teamSplitRatio);
-        while (currentTeamSizeA != teamSizeA)
-        {
-            currentTeamSizeA = SceneNetworkManager.Instance.PutPlayersInTeams(false);
-            
-            if (currentTeamSizeA == teamSizeA) break;
-
-            bool tooMany = currentTeamSizeA > teamSizeA;
-            
-            foreach (PlayerNetwork player in SceneNetworkManager.Instance.GetPlayerNetworksServerRpc())
-            {
-                if(tooMany)
-                    player.playerLog.AddLog($"Team A has too many players, \n {currentTeamSizeA - teamSizeA} players need to go to the other side");
-                else
-                    player.playerLog.AddLog($"Team B has too many players, \n {teamSizeA - currentTeamSizeA} players need to go to the other side");
-            }
-        }
-    }
-    public void PressedXDown()
-    {
-        if (!IsServer) return;
-
-        if (_currentHostListPosition != 2) return;
-        _listPrefabTextComp.color = Color.gray;
-    }
     
-    // trigger when the player presses the A button down to change text color to gray
+    /// <summary>
+    /// trigger when the player presses the A button down to change text color to gray
+    /// </summary>
     public void NextInHostsListDown()
     {
-        if (!IsServer) return;
-
         Debug.Log("Pressed A to go to next in host list down");
         _listPrefabTextComp.color = Color.gray;
     }
 
-    // trigger when the player presses the B button down to change text color to red
+    /// <summary>
+    /// trigger when the player presses the B button down to change text color to red
+    /// </summary>
     public void UndoLastHostListdown()
     {
-        if (!IsServer) return;
-
         _listPrefabTextComp.color = Color.red;
     }
     
-    // trigger when the player presses the B button up to change text color to white
+    /// <summary>
+    /// trigger when the player presses the B button up to change text color to white
+    /// </summary>
     public void UndoLastHostListup()
     {
-        if (!IsServer) return;
-
         _listPrefabTextComp.color = Color.white;
-        
-        if (_currentHostListPosition < -1)
-            return;
-        
         _currentHostListPosition--;
-        
         UpdatelistText();
-        
-        if (_currentHostListPosition == -1)
-            _listPrefabTextComp.text = _starterListText;
     }
     
     private void UpdatelistText()
     {
-        if (!IsServer) return;
-
         string text = $"Press A to \n {_listText[_currentHostListPosition]}";
         if (_listText[_currentHostListPosition + 1] != String.Empty) 
             text += $"\n \n Next: \n Press A to \n {_listText[_currentHostListPosition + 1]}";
@@ -305,7 +240,6 @@ public class HostList : NetworkBehaviour
             
             corner2 = _oldCorner2Instance.transform.position;
             PreviewMap(); // calculates the center and the map
-            MoveMinigameController();
         }
         
         
@@ -317,7 +251,6 @@ public class HostList : NetworkBehaviour
                 Destroy(_corner2Instance); //removes corner 3 sphere
             }
             PreviewMap();// calculates the center and the map
-            MoveMinigameController();
         }
     }
     
@@ -346,27 +279,21 @@ public class HostList : NetworkBehaviour
         corner3 = mid + perpendicular;
         corner4 = mid - perpendicular;
 
-        leftSide.x = corner1.x + (corner4.x - corner1.x) / 2;
-        leftSide.z = corner1.z + (corner4.z - corner1.z) / 2;
-        
-        rightSide.x = corner2.x + (corner3.x - corner2.x) / 2;
-        rightSide.z = corner2.z + (corner3.z - corner2.z) / 2;
         
         _sceneCenterInstance.transform.position = sceneCenter;
         _corner3Instance.transform.position = corner3;
         _corner4Instance.transform.position = corner4;
         
-        // corner1        //corner3//
-        //
-        // leftSide //sceneCenter// rightSide
-        //x
-        //y z //corner4//   corner2
-
     }
     
     /// <summary>
     /// Does the logic for the Host list when the player presses the A button
     /// </summary>
+    
+    void ConfirmCurrentPlayers()
+    {
+        Debug.Log("Confirm Current Players");
+    }
     void ConfirmTeams()
     {
         Debug.Log("Confirm Teams");
@@ -379,12 +306,5 @@ public class HostList : NetworkBehaviour
     void StartGame()
     {
         Debug.Log("Start Game");
-    }
-    
-    void MoveMinigameController()
-    {
-        MinigameManager.Instance.currentController.transform.localScale = new Vector3(
-            Vector3.Distance(corner1, corner4), 1, 
-            Vector3.Distance(corner2, corner4));
     }
 }

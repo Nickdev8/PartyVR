@@ -33,6 +33,13 @@ public class PlayerNetwork : NetworkBehaviour
             {
                 SceneNetworkManager.Instance.RegisterPlayerServerRpc(NetworkManager.Singleton.LocalClientId);
 
+                // Optionally assign to a team based on your logic.
+                // For example, you might assign by position:
+                if (transform.position.x < 0)
+                    SetTeamServerRpc(Team.A);
+                else
+                    SetTeamServerRpc(Team.B);
+
                 Debug.Log($"Added player {gameObject.name} to server");
             }
             else
@@ -46,7 +53,7 @@ public class PlayerNetwork : NetworkBehaviour
     {
         if (IsServer && SceneNetworkManager.Instance != null)
         {
-            SceneNetworkManager.Instance.UnregisterPlayerServerRpc(this);
+            SceneNetworkManager.Instance.UnregisterPlayerServerRpc(NetworkManager.Singleton.LocalClientId);
         }
     }
     

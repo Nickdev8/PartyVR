@@ -3,52 +3,66 @@ using Unity.Netcode;
 using UnityEngine.Events;
 using UnityEngine;
 using System.Collections;
+using System.Linq;
 
 public class MinigameController : NetworkBehaviour
 {
     [Header("Settings")]
-    public bool teamMode;
-    [Range(0, 1)] public float teamSplitRatio = 0.5f;
-    public int minimumPlayerCount;
-    
-    [Header("Spawn Settings")]
-    public Transform[] objectSpawnPoints;
-    public List<NetworkObject> spawnableObjects;
-    
-    [Header("EndGame Requirements")]
-    public bool useGameTime;
+    public bool TeamMode;
+    [Range(0, 1)] public float TeamSplitRatio = 0.5f;
+    public Transform[] SpawnPoints;
+    public List<NetworkObject> CustomObjects;
     public float gameTime;
-    public bool useTeamDead;
-    public int teamMinimumGameSize;
-    
-    [Header("Events")]
-    public UnityEvent onGameStart;
-    public UnityEvent onGameEnd;
+    public int minimumPlayerCount;
 
-    private List<GameObject> _initialisedObjects;
+    [Header("Events")]
+    public UnityEvent OnGameStart;
+    public UnityEvent OnGameEnd;
+
+    private List<TestVRPlayer> _players = new();
 
     public void InitializeGame()
     {
+        AssignPlayers();
         SpawnObjectsServerRpc();
-        onGameStart?.Invoke();
-        
-        if (useGameTime)
-            StartCoroutine(GameLoop());
+        OnGameStart?.Invoke();
+        StartCoroutine(GameLoop());
+    }
+
+    private void AssignPlayers()
+    {
+        // Get all connected VR players
+        _players = FindObjectsOfType<TestVRPlayer>().ToList();
+
+        if (TeamMode)
+        {
+            int teamASize = Mathf.RoundToInt(_players.Count * TeamSplitRatio);
+            SplitTeamsServerRpc(teamASize);
+        }
+    }
+
+    [ServerRpc]
+    private void SplitTeamsServerRpc(int teamASize)
+    {
+        // Shuffle and split players
+        _players = _players.OrderBy(x => Random.value).ToList();
+
+        for (int i = 0; i < _players.Count; i++)
+        {
+            _players[i].SetTeamServerRpc(i < teamASize ? Team.A : Team.B);
+        }
     }
 
     [ServerRpc]
     private void SpawnObjectsServerRpc()
     {
-        foreach (Transform _transform in objectSpawnPoints)
+        foreach (var obj in CustomObjects)
         {
-            //spawns random obj at rand spawnpoint
-            int randomIndex = Random.Range(0, objectSpawnPoints.Length);
-            GameObject spawnableObj = spawnableObjects[randomIndex].gameObject;
-            _initialisedObjects.Add(Instantiate(spawnableObj, _transform.position, _transform.rotation));
+            NetworkObject spawnedObj = Instantiate(obj);
+            spawnedObj.Spawn();
         }
     }
 
-    // ends the game after some time
     private IEnumerator GameLoop()
     {
         yield return new WaitForSeconds(gameTime);
@@ -56,44 +70,16 @@ public class MinigameController : NetworkBehaviour
         EndGameServerRpc();
     }
 
-    // ends the game
     [ServerRpc]
-    private void EndGameServerRpc()
+    public void EndGameServerRpc()
     {
-        onGameEnd?.Invoke();
-        
-        foreach (GameObject obj in _initialisedObjects)
-        {
-            Destroy(obj);
-        }
-        
+        OnGameEnd?.Invoke();
         MinigameManager.Instance.StartNextGameServerRpc();
     }
-    
-    //cancel the game (may only be called before initialize game is called)
+
     [ServerRpc]
     public void CancelGameServerRpc()
     {
         Destroy(this.gameObject);
-    }
-
-    [ServerRpc]
-    public void PlayerDiedServerRpc()
-    {
-        if (useTeamDead)
-        {
-            int teamACount = 0;
-            int teamBCount = 0;
-            foreach (PlayerNetwork player in SceneNetworkManager.Instance.GetPlayerNetworksServerRpc())
-            {
-                if (player.CurrentTeam == Team.A)
-                    teamACount++;
-                else if (player.CurrentTeam == Team.B)
-                    teamBCount++;
-            }
-
-            if (teamACount < teamMinimumGameSize || teamBCount < teamMinimumGameSize)
-                EndGameServerRpc();
-        }
     }
 }

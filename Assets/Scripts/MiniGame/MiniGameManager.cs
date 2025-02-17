@@ -8,7 +8,7 @@ public class MinigameManager : NetworkBehaviour
 
     [SerializeField] private List<GameObject> _minigameQueue = new();
     private GameObject _currentMinigame;
-    public MinigameController currentController;
+    private MinigameController _currentController;
     
     private void Awake() => Instance = this;
 
@@ -33,40 +33,39 @@ public class MinigameManager : NetworkBehaviour
         _currentMinigame = Instantiate(_minigameQueue[0]);
         var networkObject = _currentMinigame.GetComponent<NetworkObject>();
         networkObject.Spawn();
-        currentController = _currentMinigame.GetComponent<MinigameController>();
+        _currentController = _currentMinigame.GetComponent<MinigameController>();
 
         _minigameQueue.RemoveAt(0);
         
         // Cancels miniGame checks are not suffient
-        if (!CheckMinigame()){ currentController.CancelGameServerRpc(); return;}
+        if (!CheckMinigame()){ _currentController.CancelGameServerRpc(); return;}
         
         // Initialize game
-        currentController.InitializeGame();
+        _currentController.InitializeGame();
     }
 
     bool CheckMinigame()
     {
         //checks if the minigame can be played with the current player count
-        if (SceneNetworkManager.Instance.currentPlayerNetworks.Count < currentController.minimumPlayerCount) {
+        if (SceneNetworkManager.Instance.CurrentPlayerIds.Count < _currentController.minimumPlayerCount) {
             Debug.LogError("MinigameManager::StartNextGameServerRpc: Players count is too small");
             return false;
         }
         return true;
     }
     
-    
-    //called from SceneNetworkManager.cs when player dies
     [ServerRpc]
     public void CheckPlayerCountServerRpc(Team team)
     {
-        foreach (PlayerNetwork player in SceneNetworkManager.Instance.currentPlayerNetworks)
+        foreach (var playerId in SceneNetworkManager.Instance.CurrentPlayerIds)
         {
-            if (player.CurrentTeam == team)
+            if (NetworkManager.Singleton.ConnectedClients.TryGetValue(playerId, out var client))
             {
-                //log that there is still someone on the team so the game does not have to be ended
-                // logs to all the clients on a team
-                player.playerLog.AddLog($"A player was eliminated at team {team}");
-                currentController.PlayerDiedServerRpc();
+                var playerNetwork = client.PlayerObject.GetComponent<PlayerNetwork>();
+                if (playerNetwork != null && playerNetwork.CurrentTeam == team)
+                {
+                    //log that there is still somewone on the team so the game does not have to be ended
+                }
             }
         }
     }
