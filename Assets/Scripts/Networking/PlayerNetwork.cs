@@ -58,7 +58,7 @@ public class PlayerNetwork : NetworkBehaviour
     }
     
     [ServerRpc(RequireOwnership = false)]
-    public void TakeDamageServerRpc(int damage)
+    public void TakeDamage(int damage)
     {
         if (!IsServer)
             return;

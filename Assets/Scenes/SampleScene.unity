@@ -19113,8 +19113,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 799166774}
-  - component: {fileID: 799166772}
   - component: {fileID: 799166773}
+  - component: {fileID: 799166772}
   m_Layer: 0
   m_Name: BuildAndShoot
   m_TagString: Untagged
@@ -19141,7 +19141,7 @@ MonoBehaviour:
   ActiveSceneSynchronization: 0
   SceneMigrationSynchronization: 1
   SpawnWithObservers: 1
-  DontDestroyWithOwner: 1
+  DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
 --- !u!114 &799166773
 MonoBehaviour:
