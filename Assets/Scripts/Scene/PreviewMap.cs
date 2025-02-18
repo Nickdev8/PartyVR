@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PreviewMap : NetworkBehaviour
 {
-    public HostList HostList;
+    public HostList hostList;
     
     public GameObject corner1Prefab;
     public GameObject corner2Prefab;
@@ -25,12 +25,7 @@ public class PreviewMap : NetworkBehaviour
     private GameObject _corner3Instance;
     private GameObject _corner4Instance;
 
-
-    private void Update()
-    {
-        if (HostList.listInstance == null)
-            return;
-    }
+    
 
     /// <summary>
     /// Gets the Corner1 & 3 and calculates the center
@@ -67,10 +62,10 @@ public class PreviewMap : NetworkBehaviour
     public void UpdateHandLogic(int currentHostListPosition)
     {
         //SetCorner1
-        if (currentHostListPosition == 0) 
+        if (currentHostListPosition == 1) 
         {
             if (_corner1Instance == null)// spawns the prefab on the hand
-                _corner1Instance = HostList.InitializeObjectAtRightHand(corner1Prefab);
+                _corner1Instance = hostList.InitializeObjectAtRightHand(corner1Prefab);
             
             if (_corner2Instance != null) Destroy(_corner2Instance);
             if (_corner3Instance != null) Destroy(_corner3Instance);
@@ -96,38 +91,34 @@ public class PreviewMap : NetworkBehaviour
         }
         
         //SetCorner2
-        else if (currentHostListPosition == 1) 
+        else if (currentHostListPosition == 2) 
         {
-            if (_corner1Instance == null)// spawns the prefab on the hand
-                _corner1Instance = HostList.InitializeObjectAtRightHand(corner1Prefab);
+            if (_corner2Instance == null)// spawns the prefab on the hand
+                _corner2Instance = hostList.InitializeObjectAtRightHand(corner2Prefab);
             
-            if (_corner2Instance != null) Destroy(_corner2Instance);
-            if (_corner3Instance != null) Destroy(_corner3Instance);
-            if (_corner4Instance != null) Destroy(_corner4Instance);
-            if (_oldCorner2Instance != null) Destroy(_oldCorner2Instance);
-            if (_sceneCenterInstance != null) Destroy(_sceneCenterInstance);
+            if (_corner1Instance != null) Destroy(_corner1Instance);
             
-            if (_oldCorner1Instance == null)// spawns the prefab for on the floor and to use the actual calilations from
+            if (_oldCorner2Instance == null)// spawns the prefab for on the floor and to use the actual calilations from
             {
-                _oldCorner1Instance =
-                    Instantiate(corner1Prefab, corner1,
+                _oldCorner2Instance =
+                    Instantiate(corner2Prefab, corner2,
                         new Quaternion()); // makes a new corner to display to the host where the corners are
-                _oldCorner1Instance.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                _oldCorner2Instance.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
             }
 
-            _oldCorner1Instance.transform.position = new Vector3(
-                _corner1Instance.transform.position.x, 0,
-                _corner1Instance.transform.position.z
+            _oldCorner2Instance.transform.position = new Vector3(
+                _corner2Instance.transform.position.x, 0,
+                _corner2Instance.transform.position.z
             ); // moves the display corner to the hands posision but wiht y=0
             
 
-            corner1 = _oldCorner1Instance.transform.localPosition;
+            corner2 = _oldCorner2Instance.transform.localPosition;
             Calculate(); // calculates the center and the map
         }
         
         
         //ConfirmRoomSize
-        else if (currentHostListPosition == 2) 
+        else if (currentHostListPosition == 3) 
         {
             if (_corner2Instance != null)
             {

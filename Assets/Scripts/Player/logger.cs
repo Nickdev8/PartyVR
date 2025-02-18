@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -11,7 +12,12 @@ public class Logger : MonoBehaviour
     
     // List to keep track of log messages
     private List<string> _logMessages = new List<string>();
-    
+
+    private void Start()
+    {
+        textLogComponent.text = string.Empty;
+    }
+
     private void LateUpdate () {
         // Calculate the target position relative to the camera's local space.
         Vector3 desiredPosition = cameraAnchor.TransformPoint(offset);

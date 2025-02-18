@@ -72,7 +72,7 @@ public class SceneNetworkManager : NetworkBehaviour
         {
             if (PlayerScripts.TryGetValue(playerId, out PlayerNetwork playerNetwork))
             {
-                //playerNetwork.logger.LogErrorText(message);
+                playerNetwork.logger.LogErrorText(message);
             }
         }
     }
@@ -84,7 +84,7 @@ public class SceneNetworkManager : NetworkBehaviour
             {
                 if (playerNetwork.CurrentTeam == team)
                 {
-                    //playerNetwork.logger.LogErrorText(message);
+                    playerNetwork.logger.LogErrorText(message);
                 }
             }
         }
@@ -93,7 +93,13 @@ public class SceneNetworkManager : NetworkBehaviour
     {
         if (PlayerScripts.TryGetValue(playerId, out PlayerNetwork playerNetwork))
         {
-            //playerNetwork.logger.LogErrorText(message);
+            playerNetwork.logger.LogErrorText(message);
         }
+    }
+
+    public PlayerNetwork GetPlayerNetwork(ulong playerId)
+    {
+        PlayerScripts.TryGetValue(playerId, out PlayerNetwork playerNetwork);
+        return playerNetwork;
     }
 }
