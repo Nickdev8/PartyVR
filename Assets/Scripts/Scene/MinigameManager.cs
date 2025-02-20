@@ -1,46 +1,60 @@
 ﻿using UnityEngine;
 using Unity.Netcode;
 using System.Collections.Generic;
+using NaughtyAttributes;
+using UnityEngine.Serialization;
 
-public class MinigameManager : NetworkBehaviour
+public class MinigameManager : MonoBehaviour
 {
     public static MinigameManager Instance;
+    
+    [ReorderableList] public List<GameObject> minigameQueue;
+    [ReadOnly] public List<GameObject> doneGames;
+    
+    [Foldout("Privates")] [ReadOnly] [SerializeField] private GameObject currentMinigame;
+    [Foldout("Privates")] [ReadOnly] [SerializeField] private MinigameController currentController;
 
-    [SerializeField] private List<GameObject> _minigameQueue = new();
-    private GameObject _currentMinigame;
-    public MinigameController currentController;
-    
-    private List<GameObject> _initialisedObjects;
-    
     private void Awake() => Instance = this;
 
     [ServerRpc]
     public void StartNextGameServerRpc()
     {
-        if (_minigameQueue.Count == 0) return;
-        
-        // Destroy previous minigame
-        if (_currentMinigame != null)
+        if (minigameQueue.Count == 0)
         {
-            var oldNetworkObject = _currentMinigame.GetComponent<NetworkObject>();
+            ResetAllMinigames(); return;
+        }
+
+        // Destroy previous minigame
+        if (currentMinigame != null)
+        {
+            var oldNetworkObject = currentMinigame.GetComponent<NetworkObject>();
             if (oldNetworkObject != null)
             {
                 oldNetworkObject.Despawn();
             }
-            Destroy(_currentMinigame);
+            Destroy(currentMinigame);
+            minigameQueue.RemoveAt(0);
         }
         
         
-        // Spawn new minigame
-        _currentMinigame = Instantiate(_minigameQueue[0]);
-        var networkObject = _currentMinigame.GetComponent<NetworkObject>();
-        networkObject.Spawn();
-        currentController = _currentMinigame.GetComponent<MinigameController>();
+        // Cancels miniGame checks are not sufficient
+        if (!CheckMinigame())
+        {
+            CancelGameServerRpc(); 
+            minigameQueue.RemoveAt(0);
+            StartNextGameServerRpc(); 
+            return;
+        }
 
-        _minigameQueue.RemoveAt(0);
-        
-        // Cancels miniGame checks are not suffient
-        if (!CheckMinigame()){ currentController.CancelGameServerRpc(); return;}
+        // Spawn new minigame
+        currentMinigame = Instantiate(minigameQueue[0]);
+        var networkObject = currentMinigame.GetComponent<NetworkObject>();
+        networkObject.Spawn();
+        currentController = currentMinigame.GetComponent<MinigameController>();
+
+        doneGames.Add(minigameQueue[0]);
+
+
         
         // Initialize game
         currentController.InitializeGame();
@@ -53,8 +67,29 @@ public class MinigameManager : NetworkBehaviour
             Debug.LogError("MinigameManager::StartNextGameServerRpc: Players count is too small");
             return false;
         }
+        //
+        // add more checks if needed
+        //
         return true;
     }
     
-    
+    private void CancelGameServerRpc()
+    {
+        var oldNetworkObject = currentController.GetComponent<NetworkObject>();
+        if (oldNetworkObject != null)
+        {
+            oldNetworkObject.Despawn();
+        }
+        
+        Destroy(currentController.gameObject);
+    }
+
+    private void ResetAllMinigames()
+    {
+        foreach (GameObject minigame in doneGames)
+        {
+            minigameQueue.Add(minigame);
+        }
+        doneGames.Clear();
+    }
 }

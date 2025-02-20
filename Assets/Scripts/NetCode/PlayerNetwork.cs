@@ -24,7 +24,7 @@ public class PlayerNetwork : NetworkBehaviour
         
         if (SceneNetworkManager.Instance != null)
         {
-            SceneNetworkManager.Instance.RegisterPlayer(NetworkManager.Singleton.LocalClientId, this);
+            SceneNetworkManager.Instance.RegisterPlayer(this);
 
             Debug.Log($"Added player {gameObject.name} to server");
         }
@@ -39,7 +39,7 @@ public class PlayerNetwork : NetworkBehaviour
     {
         if (SceneNetworkManager.Instance != null)
         {
-            SceneNetworkManager.Instance.UnregisterPlayer(NetworkManager.Singleton.LocalClientId);
+            SceneNetworkManager.Instance.UnregisterPlayer();
         }
     }
     
@@ -66,5 +66,3 @@ public class PlayerNetwork : NetworkBehaviour
         logger.LogErrorText($"Player {OwnerClientId} team changed to {current}");
     }
 }
-
-public enum Team { A, B, Dead }

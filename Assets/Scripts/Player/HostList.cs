@@ -32,6 +32,9 @@ public class HostList : NetworkBehaviour
     
     private void Update()
     {
+        if (!IsServer)
+            return;
+        
         SpawnListOnHost();
         previewMap.UpdateHandLogic(_currentHostListPosition.Value);
         

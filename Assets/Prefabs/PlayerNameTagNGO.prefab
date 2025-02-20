@@ -224,7 +224,7 @@ GameObject:
   - component: {fileID: 6347073098584878367}
   - component: {fileID: 2473314577452775205}
   - component: {fileID: -595757134969459699}
-  - component: {fileID: 8646263473796014876}
+  - component: {fileID: 517645760383033631}
   m_Layer: 0
   m_Name: PlayerNameTagNGO
   m_TagString: Untagged
@@ -300,7 +300,7 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
---- !u!114 &8646263473796014876
+--- !u!114 &517645760383033631
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -309,7 +309,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6612306959276078633}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2a8f88d32485eb4fbd6bec82fb8b0c9, type: 3}
+  m_Script: {fileID: 11500000, guid: 67ef6f1c09fd444681ac7ccff4473365, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   nameTag: {fileID: 6170250596136758714}
@@ -317,6 +317,12 @@ MonoBehaviour:
   nameTagPanel: {fileID: 8929276889983628774}
   nameTagContainer: {fileID: 7797134526043649653}
   heightOffset: 0.3
+  teamColorA:
+    serializedVersion: 2
+    rgba: 4278190335
+  teamColorB:
+    serializedVersion: 2
+    rgba: 4294902016
   PlayerName:
     m_InternalValue:
       utf8LengthInBytes: 0

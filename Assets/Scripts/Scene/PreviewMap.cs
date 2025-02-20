@@ -2,13 +2,18 @@
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
+using NaughtyAttributes;
 
 public class PreviewMap : NetworkBehaviour
 {
+    [ShowAssetPreview]
     public HostList hostList;
     
+    [ShowAssetPreview]
     public GameObject corner1Prefab;
+    [ShowAssetPreview]
     public GameObject corner2Prefab;
+    [ShowAssetPreview]
     public GameObject sceneCenterPrefab;
     
     private GameObject _corner1Instance;
@@ -61,6 +66,12 @@ public class PreviewMap : NetworkBehaviour
 
     public void UpdateHandLogic(int currentHostListPosition)
     {
+        if (currentHostListPosition == 0)
+        {
+            if (_corner1Instance != null) Destroy(_corner1Instance);
+            if (_oldCorner1Instance != null) Destroy(_oldCorner1Instance);
+        }
+
         //SetCorner1
         if (currentHostListPosition == 1) 
         {

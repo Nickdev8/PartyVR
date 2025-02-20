@@ -3,34 +3,39 @@ using Unity.Netcode;
 using UnityEngine.Events;
 using UnityEngine;
 using System.Collections;
+using NaughtyAttributes;
 
 public class MinigameController : NetworkBehaviour
 {
+    
     [Header("Settings")]
-    public bool teamMode;
+    public PlayerModes playerModes;
     [Range(0, 1)] public float teamSplitRatio = 0.5f;
     public int minimumPlayerCount;
+    public int teamMinimumGameSize;
     
     [Header("Spawn Settings")]
     public Transform[] objectSpawnPoints;
     public List<NetworkObject> spawnableObjects;
     
     [Header("EndGame Requirements")]
-    public bool useGameTime;
-    public float gameTime;
-    public bool useTeamDead;
-    public int teamMinimumGameSize;
+    public EndConditionType endCondition;
     
-    [Header("Events")]
-    public UnityEvent onGameStart;
-    public UnityEvent onGameEnd;
-
+    [SerializeField] private List<GameObject> initialisedObjects;
+    
+    [Foldout("Events")] public UnityEvent onGameStart;
+    [Foldout("Events")] public UnityEvent onGameEnd;
+    
+    
+    [Foldout("End condition variabels")] public float timeLimit;
+    [Foldout("End condition variabels")] public float maxScore;
+    [Foldout("End condition variabels")] [ReadOnly] [SerializeField] private float currentScore;
 
     public void InitializeGame()
     {
         onGameStart?.Invoke();
         
-        if (useGameTime)
+        if (endCondition == EndConditionType.TimeBased)
             StartCoroutine(GameLoop());
     }
     
@@ -38,32 +43,22 @@ public class MinigameController : NetworkBehaviour
     // ends the game after some time
     private IEnumerator GameLoop()
     {
-        yield return new WaitForSeconds(gameTime);
+        yield return new WaitForSeconds(timeLimit);
 
         EndGameServerRpc();
     }
 
-    // ends the game
     [ServerRpc]
     private void EndGameServerRpc()
     {
-        //if (team == Team.A)
-        //    SceneNetworkManager.Instance.MessagePlayers("");
+        // log team won(team team)
         
         onGameEnd?.Invoke();
     }
-    
-    //cancel the game (may only be called before initialize game is called)
-    [ServerRpc]
-    public void CancelGameServerRpc()
-    {
-        Destroy(this.gameObject);
-    }
 
-    [ServerRpc]
-    public void PlayerDiedServerRpc()
+    private void Update()
     {
-        if (useTeamDead)
+        if (endCondition == EndConditionType.TeamBased)
         {
             int teamACount = SceneNetworkManager.Instance.CountPlayersOnTeam(Team.A);
             int teamBCount = SceneNetworkManager.Instance.CountPlayersOnTeam(Team.B);
@@ -72,6 +67,15 @@ public class MinigameController : NetworkBehaviour
                 EndGameServerRpc();
             if (teamBCount < 1)
                 EndGameServerRpc();
+        }
+
+
+        else if (endCondition == EndConditionType.ScoreBased)
+        {
+            if (currentScore >= maxScore)
+            {
+                EndGameServerRpc();
+            }
         }
     }
 }

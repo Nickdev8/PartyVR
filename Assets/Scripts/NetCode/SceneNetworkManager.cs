@@ -27,8 +27,10 @@ public class SceneNetworkManager : NetworkBehaviour
     /// <summary>
     /// Called when a player is spawned.
     /// </summary>
-    public void RegisterPlayer(ulong playerId, PlayerNetwork playerNetwork)
+    public void RegisterPlayer(PlayerNetwork playerNetwork, ServerRpcParams serverRpcParams = default)
     {
+        var playerId = serverRpcParams.Receive.SenderClientId;
+        
         if (PlayerScripts.TryAdd(playerId, playerNetwork))
         {
             Debug.Log($"Playerid {playerId} & Registered to ClientScripts");
@@ -39,14 +41,17 @@ public class SceneNetworkManager : NetworkBehaviour
     /// <summary>
     /// Call this method when a player leaves the game or is destroyed.
     /// </summary>
-    public void UnregisterPlayer(ulong playerId)
+    public void UnregisterPlayer(ServerRpcParams serverRpcParams = default)
     {
+        var playerId = serverRpcParams.Receive.SenderClientId;
+        
         PlayerScripts.Remove(playerId);
         Debug.Log($"Playerid {playerId} unregistered");
     }
     
     public int CountPlayersOnTeam(Team team)
     {
+        // counts the players on a specific team (so i cant use PlayerScripts.Count)
         int count = 0;
         foreach (ulong playerId in PlayerScripts.Keys)
         {
@@ -99,6 +104,12 @@ public class SceneNetworkManager : NetworkBehaviour
 
     public PlayerNetwork GetPlayerNetwork(ulong playerId)
     {
+        PlayerScripts.TryGetValue(playerId, out PlayerNetwork playerNetwork);
+        return playerNetwork;
+    }
+    public PlayerNetwork GetPlayerNetwork(ServerRpcParams serverRpcParams = default)
+    {
+        var playerId = serverRpcParams.Receive.SenderClientId;
         PlayerScripts.TryGetValue(playerId, out PlayerNetwork playerNetwork);
         return playerNetwork;
     }
