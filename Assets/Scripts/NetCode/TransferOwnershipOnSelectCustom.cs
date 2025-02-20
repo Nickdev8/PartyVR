@@ -1,20 +1,39 @@
-using System;
-using Meta.XR.MultiplayerBlocks.NGO;
+using System.Collections;
 using UnityEngine;
-using Oculus.Interaction;
 using Unity.Netcode;
+using Meta.XR.MultiplayerBlocks.NGO;
+using Unity.Netcode.Components;
 
 public class TransferOwnershipOnSelectCustom : NetworkBehaviour
 {
-    public ClientNetworkTransform networkTransform;
-    //public int 
-    //The following ownership permission settings, defined by NetworkObject.OwnershipStatus, are only available when running in distributed authority mode:
-
-    //     None: Ownership of this NetworkObject is considered static and can't be redistributed, requested, or transferred (a Player would have this, for example).
-    //     Distributable: Ownership of this NetworkObject is automatically redistributed when a client joins or leaves, as long as ownership is not locked or a request is pending.
-    //     Transferable: Ownership of this NetworkObject can be transferred immediately, as long as ownership is not locked and there are no pending requests.
-    //     RequestRequired: Ownership of this NetworkObject must be requested before it can be transferred and will always be locked after transfer.
+    public NetworkTransform networkTransform;
     
+    private void Update()
+    {
+        // Only allow the owner to control the transform
+        if (!IsOwner || IsServer) return;
+        
+
+        // Send the updated transform to the server periodically or when significant changes occur.
+        // You might want to throttle these calls in a real project.
+        UpdateTransformServerRpc(transform.position, transform.rotation);
+    }
+
+    [ServerRpc]
+    void UpdateTransformServerRpc(Vector3 newPosition, Quaternion newRotation)
+    {
+        // Optionally, you could do some validation here
+
+        // Update the transform on the server
+        transform.position = newPosition;
+        transform.rotation = newRotation;
+
+        // Let the NetworkTransform component know about the change (if needed)
+        networkTransform.Teleport(newPosition, newRotation, transform.localScale);
+        SceneNetworkManager.Instance.MessagePlayers(
+            $"Set position: {newPosition}");
+        
+    }
 
     public void HandleSelect()
     {
@@ -34,16 +53,24 @@ public class TransferOwnershipOnSelectCustom : NetworkBehaviour
     [ClientRpc]
     void OnGrabClientRpc()
     {
-        Debug.Log("Grab ownership updated across clients.");
+        SceneNetworkManager.Instance.MessagePlayers("Grab ownership updated across clients.");
     }
 
     public void HandleUnselect()
     {
         if (IsOwner)
         {
-            networkTransform.SetState(transform.position, transform.rotation, transform.localScale, false);
-            ReleaseOwnershipServerRpc();
+            // Force the final state update as a teleport (immediate sync)
+            networkTransform.SetState(transform.position, transform.rotation, transform.localScale, true);
+            // Delay releasing ownership by one frame to ensure the state update propagates
+            StartCoroutine(DelayedReleaseOwnership());
         }
+    }
+
+    private IEnumerator DelayedReleaseOwnership()
+    {
+        yield return null; // wait one frame
+        ReleaseOwnershipServerRpc();
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -51,11 +78,12 @@ public class TransferOwnershipOnSelectCustom : NetworkBehaviour
     {
         NetworkObject.ChangeOwnership(NetworkManager.Singleton.LocalClientId);
         OnReleaseClientRpc();
+        SceneNetworkManager.Instance.MessagePlayers("Changed ownership to " + NetworkManager.Singleton.LocalClientId);
     }
 
     [ClientRpc]
     void OnReleaseClientRpc()
     {
-        Debug.Log("Object released and ownership reset.");
+        SceneNetworkManager.Instance.MessagePlayers("Object released and ownership reset.");
     }
 }

@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: 6737262b-4fab-4779-a38b-fe74012fa505
-  instanceId: 1cb933a3-5c56-431b-b828-b01fce0b0df3
+  instanceId: 5363914f-6d7a-4932-b735-81889af97598
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: 
@@ -305,7 +305,7 @@ GameObject:
   - component: {fileID: 5445143950367368569}
   - component: {fileID: 3995668608839865369}
   - component: {fileID: 4171395673590327802}
-  - component: {fileID: 8966583129067863173}
+  - component: {fileID: 4867834010136734419}
   - component: {fileID: 1652743068571259404}
   m_Layer: 0
   m_Name: '[BuildingBlock] Cube'
@@ -345,7 +345,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: e9b4b64f-1c7e-4dff-8f3c-ce409bdc3951
-  instanceId: 2b0593e8-a29c-4540-9534-b2a1e4d8c075
+  instanceId: 3fc1caff-9003-4d6b-a64d-c4746536d5da
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: d5c83ff6-47e4-4c98-acdd-041d4686912f
@@ -509,7 +509,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2642093858
+  GlobalObjectIdHash: 724410467
   InScenePlacedSourceGlobalObjectIdHash: 1826351669
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -518,7 +518,7 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &8966583129067863173
+--- !u!114 &4867834010136734419
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -527,10 +527,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7598288188305066296}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 405ed07ae7c26a141bac0d303d0a347a, type: 3}
+  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UseUnreliableDeltas: 1
+  UseUnreliableDeltas: 0
   SyncPositionX: 1
   SyncPositionY: 1
   SyncPositionZ: 1
@@ -545,8 +545,8 @@ MonoBehaviour:
   ScaleThreshold: 0.01
   UseQuaternionSynchronization: 0
   UseQuaternionCompression: 0
-  UseHalfFloatPrecision: 1
-  InLocalSpace: 1
+  UseHalfFloatPrecision: 0
+  InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
 --- !u!114 &1652743068571259404
@@ -561,7 +561,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0dc5bcf8b45417a428f9630bce64c822, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  networkTransform: {fileID: 8966583129067863173}
+  networkTransform: {fileID: 4867834010136734419}
 --- !u!1001 &6133563862126480746
 PrefabInstance:
   m_ObjectHideFlags: 0
