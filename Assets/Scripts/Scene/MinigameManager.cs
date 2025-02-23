@@ -92,4 +92,13 @@ public class MinigameManager : MonoBehaviour
         }
         doneGames.Clear();
     }
+
+    public MinigameController GetCurrentController()
+    {
+        if (currentController == null)
+            return null;
+        
+        return currentController;
+        
+    }
 }

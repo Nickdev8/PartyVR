@@ -4,8 +4,8 @@
 public class DebugRay : MonoBehaviour
 {
     public bool showRay = true;
-    public bool cornerPoint;
-    public bool spawnPoint;
+    public bool cornerPoint = true;
+    public bool spawnPoint = true;
     // Color codes (in hex):
     // 0D47FF blue, FF0C00 red, 6BF71D green
 

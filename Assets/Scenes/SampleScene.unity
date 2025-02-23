@@ -11149,25 +11149,7 @@ MonoBehaviour:
     Callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: HostList, Assembly-CSharp
-          m_MethodName: NextInHostsListDown
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - Title: Go next in Hosts list Up
-    Button: 1
-    ButtonMode: 0
-    Callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 2054087583}
           m_TargetAssemblyTypeName: HostList, Assembly-CSharp
           m_MethodName: NextInHostsListUp
           m_Mode: 1
@@ -11185,25 +11167,7 @@ MonoBehaviour:
     Callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: HostList, Assembly-CSharp
-          m_MethodName: UndoLastHostListdown
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - Title: Undo Hosts list Up
-    Button: 2
-    ButtonMode: 0
-    Callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 2054087583}
           m_TargetAssemblyTypeName: HostList, Assembly-CSharp
           m_MethodName: UndoLastHostListup
           m_Mode: 1
@@ -49436,6 +49400,8 @@ GameObject:
   - component: {fileID: 2054087585}
   - component: {fileID: 2054087583}
   - component: {fileID: 2054087584}
+  - component: {fileID: 2054087587}
+  - component: {fileID: 2054087586}
   m_Layer: 0
   m_Name: PlayerStuff
   m_TagString: Untagged
@@ -49508,6 +49474,7 @@ MonoBehaviour:
   listPrefab: {fileID: 4377183511784826484, guid: 5254688da7ddfa7428e341d80609dd2e,
     type: 3}
   previewMap: {fileID: 2054087584}
+  spawnPointMaker: {fileID: 0}
   listInstance: {fileID: 0}
   imageRenderer: {fileID: 0}
 --- !u!114 &2054087584
@@ -49529,11 +49496,15 @@ MonoBehaviour:
     type: 3}
   sceneCenterPrefab: {fileID: 6413336821794899807, guid: 35f6c817bdc26f948a58c0afba33e4c1,
     type: 3}
-  corner1: {x: 0, y: 0, z: 0}
-  corner2: {x: 0, y: 0, z: 0}
-  corner3: {x: 0, y: 0, z: 0}
-  corner4: {x: 0, y: 0, z: 0}
-  sceneCenter: {x: 0, y: 0, z: 0}
+  cor1: {x: 0, y: 0, z: 0}
+  cor2: {x: 0, y: 0, z: 0}
+  cor3: {x: 0, y: 0, z: 0}
+  cor4: {x: 0, y: 0, z: 0}
+  cent0: {x: 0, y: 0, z: 0}
+  cent1: {x: 0, y: 0, z: 0}
+  cent2: {x: 0, y: 0, z: 0}
+  cent0A: {x: 0, y: 0, z: 0}
+  cent0B: {x: 0, y: 0, z: 0}
 --- !u!114 &2054087585
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49549,6 +49520,36 @@ MonoBehaviour:
   logger: {fileID: 720795484}
   health:
     m_InternalValue: 100
+--- !u!114 &2054087586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2054087579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f03648e627c34a39b2d423775553037e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  previewNumberPlayers: 0
+--- !u!114 &2054087587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2054087579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0a8c11d48d844e782593745f3259dde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnPointPrefab: {fileID: 4311050233528468741, guid: 67b135c9ddbef2b408af9c19afeb30ea,
+    type: 3}
+  spawnPointParent: {fileID: 30720231}
+  hostList: {fileID: 2054087583}
+  ran: 0
 --- !u!1 &2058332768
 GameObject:
   m_ObjectHideFlags: 0

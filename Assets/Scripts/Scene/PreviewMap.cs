@@ -3,12 +3,14 @@ using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using NaughtyAttributes;
+using UnityEngine.Serialization;
 
 public class PreviewMap : NetworkBehaviour
 {
     [ShowAssetPreview]
     public HostList hostList;
     
+    //stuff to spawn/inistantiate
     [ShowAssetPreview]
     public GameObject corner1Prefab;
     [ShowAssetPreview]
@@ -16,13 +18,22 @@ public class PreviewMap : NetworkBehaviour
     [ShowAssetPreview]
     public GameObject sceneCenterPrefab;
     
+    //the gb that are on the hand itself
     private GameObject _corner1Instance;
     private GameObject _corner2Instance;
-    [HideInInspector] public Vector3 corner1;
-    [HideInInspector] public Vector3 corner2;
-    [HideInInspector] public Vector3 corner3;
-    [HideInInspector] public Vector3 corner4;
-    [HideInInspector] public Vector3 sceneCenter;
+    
+    [HideInInspector] public Vector3 cor1;
+    [HideInInspector] public Vector3 cor2;
+    [HideInInspector] public Vector3 cor3;
+    [HideInInspector] public Vector3 cor4;
+    
+    [HideInInspector] public Vector3 cent0;
+    [HideInInspector] public Vector3 cent1;
+    [HideInInspector] public Vector3 cent2;
+    [HideInInspector] public Vector3 cent0A;
+    [HideInInspector] public Vector3 cent0B;
+        
+    //the gb that is underneath the hand and is still there after the next step
     private GameObject _oldCorner1Instance;
     private GameObject _oldCorner2Instance;
     
@@ -31,37 +42,59 @@ public class PreviewMap : NetworkBehaviour
     private GameObject _corner4Instance;
 
     
-
-    /// <summary>
-    /// Gets the Corner1 & 3 and calculates the center
-    /// And makes corner 4 the oposite posiion relative to the ceneter of 1&3
-    /// </summary>
+    /*
+     * cor1 & cor2
+     * set by the host
+     *
+     * ┌───cent1───┐
+     * │cor1   cor3│
+     * │   cent0A  │
+     * ├───cent0───┤
+     * │   cent0B  │
+     * │cor4   cor2│
+     * └───cent2───┘
+     */
+    
     private void Calculate()
     {
         if (_sceneCenterInstance == null) // makes a new instance to display to the host where the center is
-            _sceneCenterInstance = Instantiate(sceneCenterPrefab, corner1, new Quaternion()); 
+            _sceneCenterInstance = Instantiate(sceneCenterPrefab, cor1, new Quaternion()); 
         
         // makes a new corner to display to the host where the corners are
         if (_corner3Instance == null) 
-            _corner3Instance = Instantiate(sceneCenterPrefab, corner3, new Quaternion()); 
+            _corner3Instance = Instantiate(sceneCenterPrefab, cor3, new Quaternion()); 
         if (_corner4Instance == null) 
-            _corner4Instance = Instantiate(sceneCenterPrefab, corner4, new Quaternion()); 
+            _corner4Instance = Instantiate(sceneCenterPrefab, cor4, new Quaternion()); 
 
-        sceneCenter.x = corner1.x + (corner2.x - corner1.x) / 2;
-        sceneCenter.z = corner1.z + (corner2.z - corner1.z) / 2;
+        cent0 = GetCenter(cor1, cor2);
+        cent1 = GetCenter(cor1, cor3);
+        cent2 = GetCenter(cor4, cor2);
+        cent0A = GetCenter(cent0, cent1);
+        cent0B = GetCenter(cent0, cent2);
         
-        // Assuming corner1 and corner2 are diagonal corners and lie on the same horizontal plane.
-        Vector3 mid = (corner1 + corner2) * 0.5f;
-        Vector3 halfDiagonal = (corner2 - corner1) * 0.5f;
+        
+        // Assuming cor1 and cor2 are diagonal corners and lie on the same horizontal plane.
+        Vector3 mid = (cor1 + cor2) * 0.5f;
+        Vector3 halfDiagonal = (cor2 - cor1) * 0.5f;
         Vector3 perpendicular = new Vector3(-halfDiagonal.z, 0, halfDiagonal.x);
-        corner3 = mid + perpendicular;
-        corner4 = mid - perpendicular;
+        cor3 = mid + perpendicular;
+        cor4 = mid - perpendicular;
 
         
-        _sceneCenterInstance.transform.position = sceneCenter;
-        _corner3Instance.transform.position = corner3;
-        _corner4Instance.transform.position = corner4;
+        _sceneCenterInstance.transform.position = cent0;
+        _corner3Instance.transform.position = cor3;
+        _corner4Instance.transform.position = cor4;
         
+    }
+
+    private Vector3 GetCenter(Vector3 posA, Vector3 posB, float yHight = 0)
+    {
+        Vector3 posC;
+        posC.x = posA.x + (posB.x - posA.x) / 2;
+        posC.y = yHight;
+        posC.z = posA.z + (posB.z - posA.z) / 2;
+
+        return posC;
     }
 
     public void UpdateHandLogic(int currentHostListPosition)
@@ -87,7 +120,7 @@ public class PreviewMap : NetworkBehaviour
             if (_oldCorner1Instance == null)// spawns the prefab for on the floor and to use the actual calilations from
             {
                 _oldCorner1Instance =
-                    Instantiate(corner1Prefab, corner1,
+                    Instantiate(corner1Prefab, cor1,
                         new Quaternion()); // makes a new corner to display to the host where the corners are
                 _oldCorner1Instance.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
             }
@@ -98,7 +131,7 @@ public class PreviewMap : NetworkBehaviour
             ); // moves the display corner to the hands posision but wiht y=0
             
 
-            corner1 = _oldCorner1Instance.transform.localPosition;
+            cor1 = _oldCorner1Instance.transform.localPosition;
         }
         
         //SetCorner2
@@ -112,7 +145,7 @@ public class PreviewMap : NetworkBehaviour
             if (_oldCorner2Instance == null)// spawns the prefab for on the floor and to use the actual calilations from
             {
                 _oldCorner2Instance =
-                    Instantiate(corner2Prefab, corner2,
+                    Instantiate(corner2Prefab, cor2,
                         new Quaternion()); // makes a new corner to display to the host where the corners are
                 _oldCorner2Instance.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
             }
@@ -123,7 +156,7 @@ public class PreviewMap : NetworkBehaviour
             ); // moves the display corner to the hands posision but wiht y=0
             
 
-            corner2 = _oldCorner2Instance.transform.localPosition;
+            cor2 = _oldCorner2Instance.transform.localPosition;
             Calculate(); // calculates the center and the map
         }
         

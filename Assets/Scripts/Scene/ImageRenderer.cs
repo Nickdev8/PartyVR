@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using NaughtyAttributes;
 
 public class ImageRenderer : MonoBehaviour
 {

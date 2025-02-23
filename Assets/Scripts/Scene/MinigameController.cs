@@ -3,33 +3,32 @@ using Unity.Netcode;
 using UnityEngine.Events;
 using UnityEngine;
 using System.Collections;
+using System.Runtime.Serialization;
 using NaughtyAttributes;
 
 public class MinigameController : NetworkBehaviour
 {
+    public UnityEvent onGameStart;
+    public UnityEvent onGameEnd;
     
     [Header("Settings")]
     public PlayerModes playerModes;
     [Range(0, 1)] public float teamSplitRatio = 0.5f;
     public int minimumPlayerCount;
-    public int teamMinimumGameSize;
     
-    [Header("Spawn Settings")]
+    [Header("SpawnSettings")]
     public Transform[] objectSpawnPoints;
     public List<NetworkObject> spawnableObjects;
     
-    [Header("EndGame Requirements")]
-    public EndConditionType endCondition;
-    
     [SerializeField] private List<GameObject> initialisedObjects;
     
-    [Foldout("Events")] public UnityEvent onGameStart;
-    [Foldout("Events")] public UnityEvent onGameEnd;
+    [Header("EndGameRequirements")]
+    public EndConditionType endCondition;
     
-    
-    [Foldout("End condition variabels")] public float timeLimit;
-    [Foldout("End condition variabels")] public float maxScore;
-    [Foldout("End condition variabels")] [ReadOnly] [SerializeField] private float currentScore;
+    [OptionalField] public float timeLimit;
+    [OptionalField] public int teamMinimumGameSize;
+    [OptionalField] public float maxScore;
+    [ReadOnly] [SerializeField] private float currentScore;
 
     public void InitializeGame()
     {

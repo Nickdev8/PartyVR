@@ -101,6 +101,14 @@ public class SceneNetworkManager : NetworkBehaviour
             playerNetwork.logger.LogErrorText(message);
         }
     }
+    public void MessageThisPlayer(String message, ServerRpcParams serverRpcParams = default)
+    {
+        var playerId = serverRpcParams.Receive.SenderClientId;
+        if (PlayerScripts.TryGetValue(playerId, out PlayerNetwork playerNetwork))
+        {
+            playerNetwork.logger.LogErrorText(message);
+        }
+    }
 
     public PlayerNetwork GetPlayerNetwork(ulong playerId)
     {
