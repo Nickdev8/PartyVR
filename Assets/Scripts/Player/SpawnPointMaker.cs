@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using NaughtyAttributes;
+using SaintsField;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -7,7 +7,7 @@ public class SpawnPointMaker : MonoBehaviour
 {
     public static SpawnPointMaker Instance;
     
-    [ShowAssetPreview] public GameObject spawnPointPrefab;
+    [AssetPreview] public GameObject spawnPointPrefab;
     public Transform spawnPointParent;
 
     public HostList hostList;
@@ -33,10 +33,16 @@ public class SpawnPointMaker : MonoBehaviour
     }
 
     public bool ran;
-    public bool SpawnSpawnPoint(int currentHostListPosition, bool teams = false, bool reRun = false)
+    public bool SpawnSpawnPoint(bool teams = false, int teamCount = -1,  bool reRun = false)
     {
         if (!reRun)
             if (ran) return false;
+        
+        if (teamCount == -1)
+            teamCount = SceneNetworkManager.Instance.PlayerScripts.Count;
+
+        if (teams == false)
+            teams = MinigameManager.Instance.GetCurrentController().endCondition == EndConditionType.TeamBased;
 
         
         //check if currentgame uses teams EndConditionType endConditionType = MinigameManager.Instance.GetCurrentController().endCondition;
@@ -53,12 +59,12 @@ public class SpawnPointMaker : MonoBehaviour
         
         List<Vector3> spawnPoints = new List<Vector3>();
         
-        if (teams && SceneNetworkManager.Instance.PlayerScripts.Count > 1)
+        if (teams && teamCount >= 2)
         {
-            foreach (Vector3 spawnPoint in CalculateOnTeamSide(Team.A)) {
+            foreach (Vector3 spawnPoint in CalculateOnTeamSide(Team.A, teamCount)) {
                 spawnPoints.Add(spawnPoint);
             }
-            foreach (Vector3 spawnPoint in CalculateOnTeamSide(Team.B)) {
+            foreach (Vector3 spawnPoint in CalculateOnTeamSide(Team.B, teamCount)) {
                 spawnPoints.Add(spawnPoint);
             }
         }
@@ -77,11 +83,15 @@ public class SpawnPointMaker : MonoBehaviour
         return true;
     }
 
-    List<Vector3> CalculateOnTeamSide(Team team)
+    List<Vector3> CalculateOnTeamSide(Team team, int teamCount)
     {
         List<Vector3> spawnPoints = new List<Vector3>();
         
-        int teamCount = 4;
+        // get the amount on one side rounded up. for team a and down for team b 
+        if (team == Team.A)
+            teamCount = Mathf.CeilToInt(teamCount / 2); 
+        if (team == Team.B)
+            teamCount = Mathf.FloorToInt(teamCount / 2); 
 
         if (teamCount == 1)
         {

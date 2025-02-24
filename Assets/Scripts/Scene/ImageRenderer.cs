@@ -1,10 +1,11 @@
 using System.Collections;
 using UnityEngine;
-using NaughtyAttributes;
+using SaintsField;
 
 public class ImageRenderer : MonoBehaviour
 {
     public SpriteRenderer spriteRenderer;
+    public CustomImage errorImage;
     public CustomImage[] images;
 
     private int _displayingIndex;
@@ -17,17 +18,20 @@ public class ImageRenderer : MonoBehaviour
         StopAllCoroutines();
         spriteRenderer.sprite = null;
     }
-    public void BlinkImage(int from, int to, float interval)
+    public void BlinkImage(int from, int to, float interval = 0.3f)
     {
         // Update the blink range.
         if (_displayingBlinking)
         {
             if (_displayingBlinkFrom == from && _displayingBlinkTo == to)
+            {
+                RenderImage(-1, true);
                 return;
+            }
         }
+        _displayingBlinking = true;
         
         StopAllCoroutines();
-        _displayingBlinking = true;
         _displayingBlinkFrom = from;
         _displayingBlinkTo = to;
         StartCoroutine(Blink(from, to, interval));
@@ -35,12 +39,15 @@ public class ImageRenderer : MonoBehaviour
 
     public void ShowImage(int index)
     {
-        if (index != _displayingIndex || _displayingBlinking)
+        if (index == _displayingIndex && _displayingBlinking)
         {
-            StopAllCoroutines();
-            _displayingBlinking = false;
-            RenderImage(index);
+            RenderImage(-1, true);
+            return;
         }
+        
+        StopAllCoroutines();
+        RenderImage(index);
+        _displayingBlinking = false;
     }
 
     private IEnumerator Blink(int from, int to, float interval)
@@ -60,24 +67,38 @@ public class ImageRenderer : MonoBehaviour
         }
     }
 
-    private void RenderImage(int index)
+    private void RenderImage(int index, bool error = false)
     {
-        // Ensure the index is valid.
-        if (index < 0 || index >= images.Length)
+        if (!error)
         {
-            Debug.LogWarning("Index out of range!");
-            return;
-        }
+            // Ensure the index is valid.
+            if (index < 0 || index >= images.Length)
+            {
+                Debug.LogWarning("Index out of range!");
+                return;
+            }
 
-        spriteRenderer.sprite = images[index].sprite;
-        spriteRenderer.color = images[index].color;
-        
-        // Use transform.localScale if you don't have a RectTransform.
-        // If you really need RectTransform (for UI), ensure your GameObject has one.
-        Transform imageTransform = spriteRenderer.gameObject.transform;
-        imageTransform.localScale = new Vector3(images[index].size.x * 0.08f, images[index].size.y * 0.08f, 0.08f);
-        
-        _displayingIndex = index;
+            spriteRenderer.sprite = images[index].sprite;
+            spriteRenderer.color = images[index].color;
+
+            // Use transform.localScale if you don't have a RectTransform.
+            // If you really need RectTransform (for UI), ensure your GameObject has one.
+            Transform imageTransform = spriteRenderer.gameObject.transform;
+            spriteRenderer.gameObject.transform.localScale = new Vector3(images[index].size.x * 0.08f, images[index].size.y * 0.08f, 0.08f);
+
+            _displayingIndex = index;
+        }
+        else
+        {
+            spriteRenderer.sprite = errorImage.sprite;
+            spriteRenderer.color = errorImage.color;
+
+            // Use transform.localScale if you don't have a RectTransform.
+            // If you really need RectTransform (for UI), ensure your GameObject has one.
+            spriteRenderer.gameObject.transform.localScale = new Vector3(errorImage.size.x * 0.08f, errorImage.size.y * 0.08f, 0.08f);
+
+            _displayingIndex = -1;
+        }
     }
 }
 

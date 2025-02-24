@@ -1,27 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using NaughtyAttributes;
+using SaintsField;
+using SaintsField.Playa;
 using Unity.Netcode;
 using UnityEngine;
 
-public class Debugger : NetworkBehaviour
+public class Debugger : MonoBehaviour
 {
+    [Dropdown] public HostList hostList;
     public int previewNumberPlayers;
-    private HostList _hostList;
-
+    
     private void Awake()
     {
-        if (IsHost)
-            _hostList = FindAnyObjectByType<HostList>();
+        // _networkObject = GetComponent<NetworkObject>();
     }
 
-    [Button("SpawnSpawnPoints")]
+    [Button]
     public void SpawnSpawnPoints()
     {
-        if (IsHost)
-        {
-             SceneNetworkManager.Instance.MessageThisPlayer($"HostList is {_hostList} with {previewNumberPlayers}");
-             //_hostList.spawnPointMaker.SpawnSpawnPoint(List<Vector3>, Vector3.forward * 5);
-        }
+        if (hostList.isActiveAndEnabled || !NetworkManager.Singleton.IsHost)
+            return;
+        
+        // only runs when there is a hostList and its active
+        SceneNetworkManager.Instance.MessageThisPlayer($"HostList is {hostList} with {previewNumberPlayers}");
+        hostList.spawnPointMaker.SpawnSpawnPoint(true, previewNumberPlayers, true);
+        
     }
 }

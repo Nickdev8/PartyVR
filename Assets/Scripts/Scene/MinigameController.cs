@@ -4,7 +4,7 @@ using UnityEngine.Events;
 using UnityEngine;
 using System.Collections;
 using System.Runtime.Serialization;
-using NaughtyAttributes;
+using SaintsField;
 
 public class MinigameController : NetworkBehaviour
 {

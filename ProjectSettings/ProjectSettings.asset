@@ -189,8 +189,10 @@ PlayerSettings:
   strictShaderVariantMatching: 0
   VertexChannelCompressionMask: 4054
   iPhoneSdkVersion: 988
+  iOSSimulatorArchitecture: 0
   iOSTargetOSVersionString: 12.0
   tvOSSdkVersion: 0
+  tvOSSimulatorArchitecture: 0
   tvOSRequireExtendedGameController: 0
   tvOSTargetOSVersionString: 12.0
   VisionOSSdkVersion: 0
@@ -706,6 +708,7 @@ PlayerSettings:
   switchSocketBufferEfficiency: 4
   switchSocketInitializeEnabled: 1
   switchNetworkInterfaceManagerInitializeEnabled: 1
+  switchDisableHTCSPlayerConnection: 0
   switchUseNewStyleFilepaths: 0
   switchUseLegacyFmodPriorities: 0
   switchUseMicroSleepForYield: 1
@@ -816,8 +819,23 @@ PlayerSettings:
   webGLMemoryGeometricGrowthCap: 96
   webGLPowerPreference: 2
   scriptingDefineSymbols:
-    Android: ISDK_OPENXR_HAND
-    Standalone: ISDK_OPENXR_HAND
+    Android: ISDK_OPENXR_HAND;SAINTSFIELD_SAINTS_EDITOR_APPLY
+    EmbeddedLinux: SAINTSFIELD_SAINTS_EDITOR_APPLY
+    GameCoreScarlett: SAINTSFIELD_SAINTS_EDITOR_APPLY
+    GameCoreXboxOne: SAINTSFIELD_SAINTS_EDITOR_APPLY
+    LinuxHeadlessSimulation: SAINTSFIELD_SAINTS_EDITOR_APPLY
+    Nintendo Switch: SAINTSFIELD_SAINTS_EDITOR_APPLY
+    PS4: SAINTSFIELD_SAINTS_EDITOR_APPLY
+    PS5: SAINTSFIELD_SAINTS_EDITOR_APPLY
+    QNX: SAINTSFIELD_SAINTS_EDITOR_APPLY
+    Stadia: SAINTSFIELD_SAINTS_EDITOR_APPLY
+    Standalone: ISDK_OPENXR_HAND;SAINTSFIELD_SAINTS_EDITOR_APPLY
+    VisionOS: SAINTSFIELD_SAINTS_EDITOR_APPLY
+    WebGL: SAINTSFIELD_SAINTS_EDITOR_APPLY
+    Windows Store Apps: SAINTSFIELD_SAINTS_EDITOR_APPLY
+    XboxOne: SAINTSFIELD_SAINTS_EDITOR_APPLY
+    iPhone: SAINTSFIELD_SAINTS_EDITOR_APPLY
+    tvOS: SAINTSFIELD_SAINTS_EDITOR_APPLY
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:

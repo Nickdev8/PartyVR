@@ -31,6 +31,9 @@ public class HostList : NetworkBehaviour
     
     private void Awake()
     {
+        if (IsHost)
+            this.enabled = false;
+            
         _cameraRig = FindAnyObjectByType<OVRCameraRig>();
 
         _currentHostListPosition = new ObservableInt();
@@ -47,26 +50,32 @@ public class HostList : NetworkBehaviour
         
         
         if (_currentHostListPosition.Value == -1) imageRenderer.ClearImage();
-        if (_currentHostListPosition.Value == 0) imageRenderer.BlinkImage(0, 1, 0.3f);
-        if (_currentHostListPosition.Value == 1) imageRenderer.BlinkImage(2, 3, 0.3f);
-        if (_currentHostListPosition.Value == 2) imageRenderer.BlinkImage(4, 5, 0.3f);
-        if (_currentHostListPosition.Value == 3)
+        else if (_currentHostListPosition.Value == 0) imageRenderer.BlinkImage(0, 1);
+        else if (_currentHostListPosition.Value == 1) imageRenderer.BlinkImage(2, 3);
+        else if (_currentHostListPosition.Value == 2) imageRenderer.BlinkImage(4, 5);
+        else if (_currentHostListPosition.Value == 3)
         {
             //runs the spawnPoint maker and returns if successful. if not, rerun
             //spawnPointMaker.ran = spawnPointMaker.SpawnSpawnPoint(_currentHostListPosition.Value,
             //    MinigameManager.Instance.GetCurrentController().endCondition == EndConditionType.TeamBased);
-            spawnPointMaker.ran = spawnPointMaker.SpawnSpawnPoint(_currentHostListPosition.Value, true);
-
+            spawnPointMaker.ran = spawnPointMaker.SpawnSpawnPoint();
+            
+            SceneNetworkManager.Instance.MessagePlayers($"{spawnPointMaker.ran}");
+            
             if (!spawnPointMaker.ran)
             {
-                imageRenderer.BlinkImage(6, 7, 0.3f);
+                imageRenderer.BlinkImage(6, 7);
             }
             else
             {
                 imageRenderer.ShowImage(8);
             }
         }
-        if (_currentHostListPosition.Value == 4) imageRenderer.ClearImage();
+        else if (_currentHostListPosition.Value == 4) imageRenderer.ClearImage();
+        else
+        {
+            imageRenderer.BlinkImage(0, 8, 0.05f);
+        }
     }
 
     /// <summary>

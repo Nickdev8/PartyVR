@@ -2,20 +2,16 @@
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
-using NaughtyAttributes;
+using SaintsField;
 using UnityEngine.Serialization;
 
 public class PreviewMap : NetworkBehaviour
 {
-    [ShowAssetPreview]
-    public HostList hostList;
+    [AssetPreview] public HostList hostList;
     
     //stuff to spawn/inistantiate
-    [ShowAssetPreview]
     public GameObject corner1Prefab;
-    [ShowAssetPreview]
     public GameObject corner2Prefab;
-    [ShowAssetPreview]
     public GameObject sceneCenterPrefab;
     
     //the gb that are on the hand itself
@@ -54,7 +50,13 @@ public class PreviewMap : NetworkBehaviour
      * │cor4   cor2│
      * └───cent2───┘
      */
-    
+
+    private void Awake()
+    {
+        if (IsHost)
+            this.enabled = false;
+    }
+
     private void Calculate()
     {
         if (_sceneCenterInstance == null) // makes a new instance to display to the host where the center is

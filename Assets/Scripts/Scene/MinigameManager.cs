@@ -1,18 +1,18 @@
 ﻿using UnityEngine;
 using Unity.Netcode;
 using System.Collections.Generic;
-using NaughtyAttributes;
+using SaintsField;
 using UnityEngine.Serialization;
 
 public class MinigameManager : MonoBehaviour
 {
     public static MinigameManager Instance;
     
-    [ReorderableList] public List<GameObject> minigameQueue;
-    [ReadOnly] public List<GameObject> doneGames;
+    public List<GameObject> minigameQueue;
+    [NonReorderable] [ReadOnly] public List<GameObject> doneGames;
     
-    [Foldout("Privates")] [ReadOnly] [SerializeField] private GameObject currentMinigame;
-    [Foldout("Privates")] [ReadOnly] [SerializeField] private MinigameController currentController;
+    [ReadOnly] public GameObject currentMinigame;
+    [ReadOnly] public MinigameController currentController;
 
     private void Awake() => Instance = this;
 
@@ -41,6 +41,7 @@ public class MinigameManager : MonoBehaviour
         if (!CheckMinigame())
         {
             CancelGameServerRpc(); 
+            doneGames.Add(minigameQueue[0]);
             minigameQueue.RemoveAt(0);
             StartNextGameServerRpc(); 
             return;
