@@ -39,7 +39,7 @@ public class SpawnPointMaker : MonoBehaviour
             if (ran) return false;
         
         if (teamCount == -1)
-            teamCount = SceneNetworkManager.Instance.PlayerScripts.Count;
+            teamCount = SceneNetworkManager.Instance.ConnectedClientsCount();
 
         if (teams == false)
             teams = MinigameManager.Instance.GetCurrentController().endCondition == EndConditionType.TeamBased;

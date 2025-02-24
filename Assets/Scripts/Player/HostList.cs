@@ -60,7 +60,7 @@ public class HostList : NetworkBehaviour
             //    MinigameManager.Instance.GetCurrentController().endCondition == EndConditionType.TeamBased);
             spawnPointMaker.ran = spawnPointMaker.SpawnSpawnPoint();
             
-            SceneNetworkManager.Instance.MessagePlayers($"{spawnPointMaker.ran}");
+            SceneNetworkManager.Instance.MessagePlayersRpc($"{spawnPointMaker.ran}");
             
             if (!spawnPointMaker.ran)
             {
@@ -136,7 +136,7 @@ public class HostList : NetworkBehaviour
 
     private void OnCurrentHostListPositionChanged(int newValue) {
         if (listInstance != null) {
-            SceneNetworkManager.Instance.MessagePlayers("OnCurrentHostListPositionChanged To " + newValue);
+            SceneNetworkManager.Instance.MessagePlayersRpc("OnCurrentHostListPositionChanged To " + newValue);
         }
     }
 }

@@ -19,28 +19,7 @@ public class PlayerNetwork : NetworkBehaviour
     
     public override void OnNetworkSpawn()
     {
-        // Automatically react to team changes
         _currentTeam.OnValueChanged += OnTeamChanged;
-        
-        if (SceneNetworkManager.Instance != null)
-        {
-            SceneNetworkManager.Instance.RegisterPlayer(this);
-
-            Debug.Log($"Added player {gameObject.name} to server");
-        }
-        else
-        {
-            Debug.LogError("SceneNetworkManager.Instance is null. Make sure the SceneNetworkManager is in the scene and active.");
-        }
-        
-    }
-
-    public override void OnNetworkDespawn()
-    {
-        if (SceneNetworkManager.Instance != null)
-        {
-            SceneNetworkManager.Instance.UnregisterPlayer();
-        }
     }
     
     public void TakeDamage(int damage)
@@ -49,14 +28,12 @@ public class PlayerNetwork : NetworkBehaviour
         if (health.Value <= 0)
         {
             health.Value = 0;
-            SetTeamServerRpc(Team.Dead);
+            SetTeam(Team.Dead);
         }
     }
     
-    [ServerRpc]
-    public void SetTeamServerRpc(Team team)
+    public void SetTeam(Team team)
     {
-        // Server authority - only the server can change the team
         _currentTeam.Value = team;
     }
 

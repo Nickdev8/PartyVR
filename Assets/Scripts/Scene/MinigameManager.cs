@@ -16,8 +16,8 @@ public class MinigameManager : MonoBehaviour
 
     private void Awake() => Instance = this;
 
-    [ServerRpc]
-    public void StartNextGameServerRpc()
+    [Rpc(SendTo.Server)]
+    public void StartNextGameRpc()
     {
         if (minigameQueue.Count == 0)
         {
@@ -43,7 +43,7 @@ public class MinigameManager : MonoBehaviour
             CancelGameServerRpc(); 
             doneGames.Add(minigameQueue[0]);
             minigameQueue.RemoveAt(0);
-            StartNextGameServerRpc(); 
+            StartNextGameRpc(); 
             return;
         }
 
@@ -64,7 +64,7 @@ public class MinigameManager : MonoBehaviour
     bool CheckMinigame()
     {
         //checks if the minigame can be played with the current player count
-        if (SceneNetworkManager.Instance.PlayerScripts.Keys.Count < currentController.minimumPlayerCount) {
+        if (SceneNetworkManager.Instance.ConnectedClientsCount() < currentController.minimumPlayerCount) {
             Debug.LogError("MinigameManager::StartNextGameServerRpc: Players count is too small");
             return false;
         }

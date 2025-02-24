@@ -22,8 +22,18 @@ public class Debugger : MonoBehaviour
             return;
         
         // only runs when there is a hostList and its active
-        SceneNetworkManager.Instance.MessageThisPlayer($"HostList is {hostList} with {previewNumberPlayers}");
+        SceneNetworkManager.Instance.MessageThisPlayerRpc($"HostList is {hostList} with {previewNumberPlayers}");
         hostList.spawnPointMaker.SpawnSpawnPoint(true, previewNumberPlayers, true);
-        
+    }
+
+    [Button] [Rpc(SendTo.Server)]
+    public void WriteTestToHostRpc()
+    {
+        SceneNetworkManager.Instance.MessageThisPlayerRpc("this is the host");
+    }
+    [Button] [Rpc(SendTo.NotMe)]
+    public void WriteTestNotMeRpc()
+    {
+        SceneNetworkManager.Instance.MessageThisPlayerRpc("this is not the sender");
     }
 }

@@ -44,11 +44,11 @@ public class MinigameController : NetworkBehaviour
     {
         yield return new WaitForSeconds(timeLimit);
 
-        EndGameServerRpc();
+        EndGameRpc();
     }
 
-    [ServerRpc]
-    private void EndGameServerRpc()
+    [Rpc(SendTo.Server)]
+    private void EndGameRpc()
     {
         // log team won(team team)
         
@@ -63,9 +63,9 @@ public class MinigameController : NetworkBehaviour
             int teamBCount = SceneNetworkManager.Instance.CountPlayersOnTeam(Team.B);
 
             if (teamACount < 1)
-                EndGameServerRpc();
+                EndGameRpc();
             if (teamBCount < 1)
-                EndGameServerRpc();
+                EndGameRpc();
         }
 
 
@@ -73,7 +73,7 @@ public class MinigameController : NetworkBehaviour
         {
             if (currentScore >= maxScore)
             {
-                EndGameServerRpc();
+                EndGameRpc();
             }
         }
     }
