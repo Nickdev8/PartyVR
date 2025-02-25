@@ -8,10 +8,11 @@ public class ImageRenderer : MonoBehaviour
     public CustomImage errorImage;
     public CustomImage[] images;
 
-    private int _displayingIndex;
-    private bool _displayingBlinking;
-    private int _displayingBlinkFrom;
-    private int _displayingBlinkTo;
+    // this was for checking if it is the same as the current displaing image
+    // private int _displayingIndex;
+    // private bool _displayingBlinking;
+    // private int _displayingBlinkFrom;
+    // private int _displayingBlinkTo;
 
     public void ClearImage()
     {
@@ -20,44 +21,55 @@ public class ImageRenderer : MonoBehaviour
     }
     public void BlinkImage(int from, int to, float interval = 0.3f)
     {
+        // this was for checking if it is the same as the current displaing image
         // Update the blink range.
-        if (_displayingBlinking)
-        {
-            if (_displayingBlinkFrom == from && _displayingBlinkTo == to)
-            {
-                RenderImage(-1, true);
-                return;
-            }
-        }
-        _displayingBlinking = true;
+        // if (_displayingBlinking)
+        // {
+        //     if (_displayingBlinkFrom == from && _displayingBlinkTo == to)
+        //     {
+        //         RenderImage(-1, true);
+        //         return;
+        //     }
+        // }
+        // _displayingBlinking = true;
         
         StopAllCoroutines();
-        _displayingBlinkFrom = from;
-        _displayingBlinkTo = to;
         StartCoroutine(Blink(from, to, interval));
     }
 
     public void ShowImage(int index)
     {
-        if (index == _displayingIndex && _displayingBlinking)
-        {
-            RenderImage(-1, true);
-            return;
-        }
+        // this was for checking if it is the same as the current displaing image
+        // if (index == _displayingIndex && _displayingBlinking)
+        // {
+        //     RenderImage(-1, true);
+        //     return;
+        // }
         
         StopAllCoroutines();
-        RenderImage(index);
-        _displayingBlinking = false;
+        if (images[index] == null)
+        {
+            RenderImage(index, true);
+        }
+        else
+        {
+            RenderImage(index);
+        }
     }
 
     private IEnumerator Blink(int from, int to, float interval)
     {
         int currentImageIndex = from;
         
+        if (images[from] == null || images[to] == null)
+        {
+            RenderImage(0, true);
+            yield break;
+        }
+        
         while (true)
         {
-            if (currentImageIndex != _displayingIndex)
-                RenderImage(currentImageIndex);
+            RenderImage(currentImageIndex);
             
             currentImageIndex++;
             if (currentImageIndex > to)
@@ -81,23 +93,15 @@ public class ImageRenderer : MonoBehaviour
             spriteRenderer.sprite = images[index].sprite;
             spriteRenderer.color = images[index].color;
 
-            // Use transform.localScale if you don't have a RectTransform.
-            // If you really need RectTransform (for UI), ensure your GameObject has one.
             Transform imageTransform = spriteRenderer.gameObject.transform;
             spriteRenderer.gameObject.transform.localScale = new Vector3(images[index].size.x * 0.08f, images[index].size.y * 0.08f, 0.08f);
-
-            _displayingIndex = index;
         }
         else
         {
             spriteRenderer.sprite = errorImage.sprite;
             spriteRenderer.color = errorImage.color;
 
-            // Use transform.localScale if you don't have a RectTransform.
-            // If you really need RectTransform (for UI), ensure your GameObject has one.
             spriteRenderer.gameObject.transform.localScale = new Vector3(errorImage.size.x * 0.08f, errorImage.size.y * 0.08f, 0.08f);
-
-            _displayingIndex = -1;
         }
     }
 }

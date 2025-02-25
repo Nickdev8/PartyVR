@@ -1,0 +1,27 @@
+{
+  "name": "today.comes.saintsfield",
+  "version": "3.30.0",
+  "displayName": "SaintsField",
+  "description": "A Unity plugin for field in inspector",
+  "unity": "2019.1",
+  "dependencies": {
+  },
+  "keywords": [
+    "unity",
+    "inspector"
+  ],
+  "category": "editor extensions",
+  "author": {
+    "name": "TylerTemp",
+    "email": "tylertempdev@gmail.com",
+    "url": "https://github.com/TylerTemp/SaintsField"
+  },
+  "license": "MIT",
+  "samples": [
+    {
+      "displayName": "Samples",
+      "description": "Full example of this project",
+      "path": "Samples~"
+    }
+  ]
+}

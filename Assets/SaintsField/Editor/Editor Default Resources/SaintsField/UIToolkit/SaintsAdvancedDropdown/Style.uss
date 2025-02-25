@@ -1,0 +1,82 @@
+.saintsfield-advanced-dropdown-search-container {
+    padding: 5px 5px 10px 5px;
+}
+
+ToolbarSearchField {
+    width: 100%;
+    /*padding: 0 5px;*/
+    margin: 0;
+}
+
+ToolbarBreadcrumbs {
+    flex-wrap: wrap;
+}
+
+Button.saintsfield-advanced-dropdown-item {
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    margin: 0;
+    padding: 0;
+    cursor: link;
+
+    border-radius: 0;
+}
+
+.saintsfield-advanced-dropdown-item.saintsfield-advanced-dropdown-item-active:hover {
+    background-color: rgb(89, 89, 89);
+}
+
+.saintsfield-advanced-dropdown-item.saintsfield-advanced-dropdown-item-selected {
+    background-color: rgb(48, 48, 48);
+    cursor: arrow;
+}
+
+.saintsfield-advanced-dropdown-item.saintsfield-advanced-dropdown-item-selected.active:hover {
+    background-color: rgb(48, 48, 48);
+}
+
+/*.saintsfield-advanced-dropdown-item.saintsfield-advanced-dropdown-item-disabled > * > Label {*/
+/*    color: rgb(89, 89, 89);*/
+/*}*/
+
+.saintsfield-advanced-dropdown-item.saintsfield-advanced-dropdown-item-disabled {
+    cursor: arrow;
+}
+
+.saintsfield-advanced-dropdown-separator {
+    height: 2px;
+    background-color: rgb(89, 89, 89);
+}
+
+
+.saintsfield-advanced-dropdown-anim {
+    transition-duration: 0.2s;
+    /*transition-duration: 30s;*/
+    transition-delay: 0s;
+    transition-timing-function: ease;
+    transition-property: translate;
+}
+
+.saintsfield-advanced-dropdown-anim-in-view {
+    translate: 0 0;
+}
+
+.saintsfield-advanced-dropdown-anim-right {
+    translate: 100% 0;
+}
+
+.saintsfield-advanced-dropdown-anim-left {
+    translate: -100% 0;
+}
+
+.saintsfield-advanced-dropdown-fade-out-container {
+    position: absolute;
+}
+
+/* This does not work */
+/*Scroller {*/
+/*    display: none;*/
+/*}*/

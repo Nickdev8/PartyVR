@@ -1,0 +1,52 @@
+{
+    "name": "today.comes.saintsfield.Samples",
+    "rootNamespace": "",
+    "references": [
+        "today.comes.saintsfield.Runtime",
+        "today.comes.saintsfield.Editor",
+        "Unity.Addressables",
+        "DOTween.Modules",
+        "AYellowpaper.SerializedCollections",
+        "NaughtyAttributes.Core",
+        "today.comes.saintsfield.Runtime.Addressable",
+        "Unity.Netcode.Runtime"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [
+        "DOTweenEditor.dll",
+        "DOTween.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.addressables",
+            "expression": "",
+            "define": "SAINTSFIELD_ADDRESSABLE"
+        },
+        {
+            "name": "com.dbrizov.naughtyattributes",
+            "expression": "",
+            "define": "SAINTSFIELD_SAMPLE_NAUGHYTATTRIBUTES"
+        },
+        {
+            "name": "com.unity.ai.navigation",
+            "expression": "",
+            "define": "SAINTSFIELD_AI_NAVIGATION"
+        },
+        {
+            "name": "com.unity.netcode.gameobjects",
+            "expression": "",
+            "define": "SAINTSFIELD_NETCODE_GAMEOBJECTS"
+        },
+        {
+            "name": "today.comes.saintsdraw",
+            "expression": "1.0.4",
+            "define": "SAINTSFIELD_SAINTSDRAW"
+        }
+    ],
+    "noEngineReferences": false
+}

@@ -38,6 +38,7 @@ public class HostList : NetworkBehaviour
 
         _currentHostListPosition = new ObservableInt();
         _currentHostListPosition.OnValueChanged += OnCurrentHostListPositionChanged;
+        imageRenderer.BlinkImage(0, 1); // show the blinking press a button
     }
     
     private void Update()
@@ -47,34 +48,12 @@ public class HostList : NetworkBehaviour
         
         SpawnListOnHost();
         previewMap.UpdateHandLogic(_currentHostListPosition.Value);
-        
-        
-        if (_currentHostListPosition.Value == -1) imageRenderer.ClearImage();
-        else if (_currentHostListPosition.Value == 0) imageRenderer.BlinkImage(0, 1);
-        else if (_currentHostListPosition.Value == 1) imageRenderer.BlinkImage(2, 3);
-        else if (_currentHostListPosition.Value == 2) imageRenderer.BlinkImage(4, 5);
-        else if (_currentHostListPosition.Value == 3)
+
+        if (_currentHostListPosition.Value == 4)
         {
-            //runs the spawnPoint maker and returns if successful. if not, rerun
-            //spawnPointMaker.ran = spawnPointMaker.SpawnSpawnPoint(_currentHostListPosition.Value,
-            //    MinigameManager.Instance.GetCurrentController().endCondition == EndConditionType.TeamBased);
             spawnPointMaker.ran = spawnPointMaker.SpawnSpawnPoint();
             
             SceneNetworkManager.Instance.MessagePlayersRpc($"{spawnPointMaker.ran}");
-            
-            if (!spawnPointMaker.ran)
-            {
-                imageRenderer.BlinkImage(6, 7);
-            }
-            else
-            {
-                imageRenderer.ShowImage(8);
-            }
-        }
-        else if (_currentHostListPosition.Value == 4) imageRenderer.ClearImage();
-        else
-        {
-            imageRenderer.BlinkImage(0, 8, 0.05f);
         }
     }
 
@@ -108,7 +87,45 @@ public class HostList : NetworkBehaviour
             }
         }
     }
+    
+    private void OnCurrentHostListPositionChanged(int newValue) 
+    {
+        if (listInstance != null) {
+            SceneNetworkManager.Instance.MessagePlayersRpc("OnCurrentHostListPositionChanged To " + newValue);
+        }
+        
+        if (newValue == -1) imageRenderer.ClearImage();
+        else if (newValue == 0) imageRenderer.BlinkImage(0, 1); // this is also on 41:9
+        else if (newValue == 1) imageRenderer.BlinkImage(2, 3); // show Corner 1 blinking
+        else if (newValue == 2) imageRenderer.BlinkImage(4, 5); // show Corner 2 blinking
+        else if (newValue == 3) imageRenderer.BlinkImage(9, 10);// start next game
+        else if (newValue == 4)                                 // calculates the spawn locations for the playerObjects
+        {
+            //runs the spawnPoint maker and returns if successful. if not, rerun
+            //spawnPointMaker.ran = spawnPointMaker.SpawnSpawnPoint(_currentHostListPosition.Value,
+            //    MinigameManager.Instance.GetCurrentController().endCondition == EndConditionType.TeamBased);
+            
+            if (!spawnPointMaker.ran)
+            {
+                imageRenderer.BlinkImage(6, 7);
+                return;
+            }
+            if (spawnPointMaker.ran)
+            {
+                imageRenderer.ShowImage(8);
+                return;
+            }
+            
+            imageRenderer.ShowImage(-1);
+        }
+        else if (newValue == 5) imageRenderer.ClearImage();
+        else
+        {
+            imageRenderer.ShowImage(-1);
+        }
+    }
 
+    // <--- this is for functions that can be called from anywhere --->
     public GameObject InitializeObjectAtRightHand(GameObject prefab)
     {
         if (_cameraRig != null && _cameraRig.rightControllerAnchor != null)
@@ -124,7 +141,6 @@ public class HostList : NetworkBehaviour
         }
         return null;
     }
-    
     public void NextInHostsListUp() {
         if (IsServer)
             _currentHostListPosition.Value++;
@@ -132,12 +148,6 @@ public class HostList : NetworkBehaviour
     public void UndoLastHostListup() {
         if (IsServer)
             _currentHostListPosition.Value--;
-    }
-
-    private void OnCurrentHostListPositionChanged(int newValue) {
-        if (listInstance != null) {
-            SceneNetworkManager.Instance.MessagePlayersRpc("OnCurrentHostListPositionChanged To " + newValue);
-        }
     }
 }
 

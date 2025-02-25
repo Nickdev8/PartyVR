@@ -57,26 +57,4 @@ public class SceneNetworkManager : NetworkBehaviour
             player.logger.LogErrorText(message);
         }
     }
-    
-    [Rpc(SendTo.ClientsAndHost)]
-    public void MessagePlayersRpc(String message, ulong playerId)
-    {
-        foreach (PlayerNetwork player in FindObjectsOfType<PlayerNetwork>())
-        {
-            if (player.NetworkObjectId == playerId)
-                player.logger.LogErrorText(message);
-        }
-    }
-    
-    [Rpc(SendTo.ClientsAndHost)]
-    public void MessageThisPlayerRpc(String message, ServerRpcParams serverRpcParams = default)
-    {
-        var playerId = serverRpcParams.Receive.SenderClientId;
-        
-        foreach (PlayerNetwork player in FindObjectsOfType<PlayerNetwork>())
-        {
-            if (player.NetworkObjectId == playerId)
-                player.logger.LogErrorText(message);
-        }
-    }
 }
