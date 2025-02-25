@@ -1,5 +1,5 @@
 ﻿//Minigame Controller
-public enum PlayerModes { Teams, EveryoneForThemselves }
+public enum PlayerModes { Teams, Single }
 public enum EndConditionType { TimeBased, ScoreBased, TeamBased, Endless }
 
 //Players

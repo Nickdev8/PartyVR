@@ -7,7 +7,7 @@ QualitySettings:
   m_CurrentQuality: 0
   m_QualitySettings:
   - serializedVersion: 3
-    name: High Fidelity
+    name: Normal
     pixelLightCount: 1
     shadows: 2
     shadowResolution: 1
@@ -25,9 +25,9 @@ QualitySettings:
     antiAliasing: 4
     softParticles: 0
     softVegetation: 1
-    realtimeReflectionProbes: 1
-    billboardsFaceCameraPosition: 1
-    useLegacyDetailDistribution: 1
+    realtimeReflectionProbes: 0
+    billboardsFaceCameraPosition: 0
+    useLegacyDetailDistribution: 0
     vSyncCount: 0
     realtimeGICPUUsage: 50
     lodBias: 2
@@ -39,7 +39,7 @@ QualitySettings:
     streamingMipmapsRenderersPerFrame: 512
     streamingMipmapsMaxLevelReduction: 2
     streamingMipmapsMaxFileIORequests: 1024
-    particleRaycastBudget: 2048
+    particleRaycastBudget: 1024
     asyncUploadTimeSlice: 2
     asyncUploadBufferSize: 3
     asyncUploadPersistentBuffer: 1

@@ -167,7 +167,19 @@ MonoBehaviour:
         m_CallState: 2
   _whenUnselect:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4174577772656320771}
+        m_TargetAssemblyTypeName: NetcodeSendTransform, Assembly-CSharp
+        m_MethodName: OnLettingObjectFallDown
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _whenMove:
     m_PersistentCalls:
       m_Calls: []
@@ -354,6 +366,7 @@ MonoBehaviour:
   sendPosition: 1
   sendRotation: 1
   sendScale: 0
+  useGravity: 1
 --- !u!1 &4877979887834180173
 GameObject:
   m_ObjectHideFlags: 0
@@ -456,7 +469,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: 6737262b-4fab-4779-a38b-fe74012fa505
-  instanceId: 3099a41c-129c-4e49-8103-cac74500d7ac
+  instanceId: 1c011c00-62ed-4553-ba38-c6a145608283
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: 

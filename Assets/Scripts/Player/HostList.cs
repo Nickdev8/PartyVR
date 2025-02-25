@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class HostList : NetworkBehaviour
@@ -27,33 +28,61 @@ public class HostList : NetworkBehaviour
      * │   cent0B  │
      * │cor4   cor2│
      * └───cent2───┘
+     *
+     * _currentHostListPosition.value == on changed
+     *  0 = show the blinking press the A button
+     *  1 = show Corner 1 blinking
+     *  2 = show Corner 2 blinking
+     *  3 = show start next game
+     *  4 = show calculates the spawn locations for the playerObjects
+     * 
      */
-    
+
+
     private void Awake()
     {
         if (IsHost)
             this.enabled = false;
             
+        _currentHostListPosition = new ObservableInt();
+    }
+    
+    private void Start()
+    {
+        _currentHostListPosition.OnValueChanged += OnCurrentHostListPositionChanged;
+        NetworkManager.Singleton.OnServerStarted += SpawnListOnHost;
         _cameraRig = FindAnyObjectByType<OVRCameraRig>();
 
-        _currentHostListPosition = new ObservableInt();
-        _currentHostListPosition.OnValueChanged += OnCurrentHostListPositionChanged;
         imageRenderer.BlinkImage(0, 1); // show the blinking press a button
     }
+    
     
     private void Update()
     {
         if (!IsServer)
             return;
-        
-        SpawnListOnHost();
         previewMap.UpdateHandLogic(_currentHostListPosition.Value);
 
         if (_currentHostListPosition.Value == 4)
         {
+            // runs the spawnPoint maker and returns if successful. if not, rerun
             spawnPointMaker.ran = spawnPointMaker.SpawnSpawnPoint();
             
             SceneNetworkManager.Instance.MessagePlayersRpc($"{spawnPointMaker.ran}");
+        }
+    }
+
+    public void OnSpawnPointRanValueChanged(bool ran)
+    {
+        if (_currentHostListPosition.Value == 4)
+        {
+            if (!ran)
+            {
+                imageRenderer.BlinkImage(6, 7);
+                return;
+            }
+
+            imageRenderer.ShowImage(8);
         }
     }
 
@@ -62,10 +91,9 @@ public class HostList : NetworkBehaviour
     /// This runs only on the server.
     /// Sets the listPrefabTextComp to the correct child component
     /// </summary>
-    private bool _ranBefore = false;
     private void SpawnListOnHost()
     {
-        if (!_ranBefore && IsServer)
+        if (IsServer)
         {
             // Only instantiate once.
             if (listInstance == null)
@@ -75,14 +103,15 @@ public class HostList : NetworkBehaviour
                     // Instantiate ListPrefab as a child of rightControllerAnchor.
                     listInstance = InitializeObjectAtRightHand(listPrefab);
                     imageRenderer = listInstance.GetComponent<ImageRenderer>();
+                    OnCurrentHostListPositionChanged(0);
                     
                     Debug.Log("Hostlist: ListPrefab instantiated as child of rightControllerAnchor.");
-                    // makes it so it cant be run multiple times
-                    _ranBefore = true;
                 }
                 else
                 {
-                    Debug.LogError("Hostlist: OVRCameraRig or rightControllerAnchor is null.");
+                    Debug.LogWarning("Hostlist: OVRCameraRig or rightControllerAnchor is null.");
+                    _cameraRig = FindAnyObjectByType<OVRCameraRig>();
+                    SpawnListOnHost();
                 }
             }
         }
@@ -99,25 +128,7 @@ public class HostList : NetworkBehaviour
         else if (newValue == 1) imageRenderer.BlinkImage(2, 3); // show Corner 1 blinking
         else if (newValue == 2) imageRenderer.BlinkImage(4, 5); // show Corner 2 blinking
         else if (newValue == 3) imageRenderer.BlinkImage(9, 10);// start next game
-        else if (newValue == 4)                                 // calculates the spawn locations for the playerObjects
-        {
-            //runs the spawnPoint maker and returns if successful. if not, rerun
-            //spawnPointMaker.ran = spawnPointMaker.SpawnSpawnPoint(_currentHostListPosition.Value,
-            //    MinigameManager.Instance.GetCurrentController().endCondition == EndConditionType.TeamBased);
-            
-            if (!spawnPointMaker.ran)
-            {
-                imageRenderer.BlinkImage(6, 7);
-                return;
-            }
-            if (spawnPointMaker.ran)
-            {
-                imageRenderer.ShowImage(8);
-                return;
-            }
-            
-            imageRenderer.ShowImage(-1);
-        }
+        else if (newValue == 4) imageRenderer.BlinkImage(6, 7); // calculates the spawn locations for the playerObjects
         else if (newValue == 5) imageRenderer.ClearImage();
         else
         {

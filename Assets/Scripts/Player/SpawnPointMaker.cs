@@ -32,7 +32,17 @@ public class SpawnPointMaker : MonoBehaviour
         pm = hostList.GetComponent<PreviewMap>();
     }
 
-    public bool ran;
+    private bool _ran;
+    public bool ran {
+        get { return _ran; }
+        set {
+            // Only act if the value really changes
+            if (_ran != value) {
+                _ran = value;
+                hostList.OnSpawnPointRanValueChanged(_ran);
+            }
+        }
+    }
     public bool SpawnSpawnPoint(bool teams = false, int teamCount = -1,  bool reRun = false)
     {
         if (!reRun)
@@ -42,7 +52,7 @@ public class SpawnPointMaker : MonoBehaviour
             teamCount = SceneNetworkManager.Instance.ConnectedClientsCount();
 
         if (teams == false)
-            teams = MinigameManager.Instance.GetCurrentController().endCondition == EndConditionType.TeamBased;
+            teams = MinigameManager.Instance.GetCurrentController().playerModes == PlayerModes.Teams;
 
         
         //check if currentgame uses teams EndConditionType endConditionType = MinigameManager.Instance.GetCurrentController().endCondition;

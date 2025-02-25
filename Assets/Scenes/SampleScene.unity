@@ -8454,7 +8454,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textLogComponent: {fileID: 5171757810060650624}
   cameraAnchor: {fileID: 7275482788454731297}
-  offset: {x: 0, y: -0.05, z: 0.5}
+  offset: {x: 0, y: -0.05, z: 0.6}
 --- !u!1 &1378887110042098473
 GameObject:
   m_ObjectHideFlags: 0
@@ -17939,7 +17939,7 @@ Transform:
   m_GameObject: {fileID: 882002273310138308}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.002, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -21687,7 +21687,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d7292a5e1ae17a64c95f3081d2c6be5a, type: 2}
+  - {fileID: 2100000, guid: 59e931122e9f30544a3c67f46bda4f4e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -22446,7 +22446,7 @@ Transform:
   m_GameObject: {fileID: 2287656436604763459}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.05, z: 0.5}
+  m_LocalPosition: {x: 0, y: -0.05, z: 0.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -22541,7 +22541,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d7292a5e1ae17a64c95f3081d2c6be5a, type: 2}
+  - {fileID: 2100000, guid: 59e931122e9f30544a3c67f46bda4f4e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -48809,7 +48809,6 @@ MonoBehaviour:
     type: 3}
   spawnPointParent: {fileID: 30720231}
   hostList: {fileID: 116063613738346969}
-  ran: 0
 --- !u!1 &8426961096481238850
 GameObject:
   m_ObjectHideFlags: 0

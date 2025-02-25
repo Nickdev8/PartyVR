@@ -24,9 +24,16 @@ public class NetcodeSendTransform : NetworkBehaviour
         ulong clientId = NetworkManager.Singleton.LocalClientId;
 
         ChangeOwnershipServerRpc(clientId);
-        _rb.isKinematic = !useGravity;
         
+        _rb.isKinematic = true;
         UpdateTransformServerRpc(transform.position, transform.rotation, transform.localScale);
+    }
+
+    //On Realese
+    public void OnLettingObjectFallDown()
+    {
+        _rb.isKinematic = !useGravity;
+        _rb.velocity = Vector3.zero;
     }
 
     private void FixedUpdate()
@@ -37,6 +44,7 @@ public class NetcodeSendTransform : NetworkBehaviour
             UpdateTransformClientRpc(transform.position, transform.rotation, transform.localScale);
             MoveModelToOwnPosition(transform.position, transform.rotation, transform.localScale);
         }
+        _rb.isKinematic = true;
     }
 
     void MoveModelToOwnPosition(Vector3 newPosition, Quaternion newRotation, Vector3 newScale)

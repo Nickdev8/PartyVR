@@ -25,9 +25,9 @@ public class MinigameController : NetworkBehaviour
     [Header("EndGameRequirements")]
     public EndConditionType endCondition;
     
-    [OptionalField] public float timeLimit;
-    [OptionalField] public int teamMinimumGameSize;
-    [OptionalField] public float maxScore;
+    public float timeLimit;
+    public int teamMinimumGameSize;
+    public float maxScore;
     [ReadOnly] [SerializeField] private float currentScore;
 
     public void InitializeGame()
