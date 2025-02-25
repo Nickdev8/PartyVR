@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -7,13 +8,24 @@ public class NetcodeSendTransform : NetworkBehaviour
     public bool sendPosition = true;
     public bool sendRotation = true;
     public bool sendScale = false;
+    public bool useGravity = true;
+
+    private Rigidbody _rb;
+
+    private void Start()
+    {
+        _rb = GetComponent<Rigidbody>();
+        _rb.isKinematic = true;
+        _rb.useGravity = useGravity;
+    }
 
     public void OnGrab()
     {
         ulong clientId = NetworkManager.Singleton.LocalClientId;
 
         ChangeOwnershipServerRpc(clientId);
-
+        _rb.isKinematic = !useGravity;
+        
         UpdateTransformServerRpc(transform.position, transform.rotation, transform.localScale);
     }
 
