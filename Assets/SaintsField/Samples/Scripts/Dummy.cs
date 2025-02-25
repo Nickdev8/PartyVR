@@ -21,8 +21,8 @@ namespace SaintsField.Samples.Scripts
 
         private void ReadCopy()
         {
-            string clipboardData = EditorGUIUtility.systemCopyBuffer;
-            Debug.Log("Clipboard Data: " + clipboardData);
+            //string clipboardData = EditorGUIUtility.systemCopyBuffer;
+            //Debug.Log("Clipboard Data: " + clipboardData);
         }
     }
 }

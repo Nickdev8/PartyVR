@@ -8,21 +8,17 @@ public class NetcodeSendTransform : NetworkBehaviour
     public bool sendRotation = true;
     public bool sendScale = false;
 
-    // Called when a client “grabs” the object.
     public void OnGrab()
     {
         ulong clientId = NetworkManager.Singleton.LocalClientId;
 
-        // Request the server to change ownership.
         ChangeOwnershipServerRpc(clientId);
 
-        // Immediately update the transform state.
         UpdateTransformServerRpc(transform.position, transform.rotation, transform.localScale);
     }
 
     private void FixedUpdate()
     {
-        // Only the owner sends transform updates.
         if (IsOwner)
         {
             UpdateTransformServerRpc(transform.position, transform.rotation, transform.localScale);
@@ -37,11 +33,10 @@ public class NetcodeSendTransform : NetworkBehaviour
         modelTransform.rotation = newRotation;
         modelTransform.localScale = newScale;
     }
-    // ServerRpc called by the owner to update the transform.
+    
     [ServerRpc]
     void UpdateTransformServerRpc(Vector3 newPosition, Quaternion newRotation, Vector3 newScale)
     {
-        // Optionally update the server’s copy if needed.
         transform.position = newPosition;
         modelTransform.position = newPosition;
         transform.rotation = newRotation;
@@ -50,11 +45,9 @@ public class NetcodeSendTransform : NetworkBehaviour
         modelTransform.localScale = newScale;
     }
 
-    // ClientRpc to update non-owners with the new transform values.
     [ClientRpc]
     void UpdateTransformClientRpc(Vector3 newPosition, Quaternion newRotation, Vector3 newScale)
     {
-        // The owner already has the correct transform.
         if (IsOwner)
             return;
 
@@ -75,7 +68,6 @@ public class NetcodeSendTransform : NetworkBehaviour
         }
     }
 
-    // ServerRpc to change ownership of this network object.
     [ServerRpc (RequireOwnership = false)]
     void ChangeOwnershipServerRpc(ulong newOwnerClientId)
     {
