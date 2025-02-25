@@ -44,7 +44,11 @@ public class NetcodeSendTransform : NetworkBehaviour
             UpdateTransformClientRpc(transform.position, transform.rotation, transform.localScale);
             MoveModelToOwnPosition(transform.position, transform.rotation, transform.localScale);
         }
-        _rb.isKinematic = true;
+        else
+        {
+            _rb.isKinematic = true;
+            _rb.velocity = Vector3.zero;
+        }
     }
 
     void MoveModelToOwnPosition(Vector3 newPosition, Quaternion newRotation, Vector3 newScale)
