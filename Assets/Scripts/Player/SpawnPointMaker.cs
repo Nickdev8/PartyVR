@@ -109,14 +109,14 @@ public class SpawnPointMaker : MonoBehaviour
         }
         else if (teamCount == 2)
         {
-            spawnPoints.Add(GetCenter(pm.cent0, team == Team.A ? pm.cor1 : pm.cor4)); // adds the center of the quarter of the map
-            spawnPoints.Add(GetCenter(pm.cent0, team == Team.A ? pm.cor3 : pm.cor2));
+            spawnPoints.Add(GetCenter(pm.cent0, team == Team.A ? pm.cor1.Value : pm.cor4.Value)); // adds the center of the quarter of the map
+            spawnPoints.Add(GetCenter(pm.cent0, team == Team.A ? pm.cor3.Value : pm.cor2.Value));
         }
         else if (teamCount == 3) // now i did both
         {
             spawnPoints.Add(team == Team.A ? pm.cent0A : pm.cent0B);
-            spawnPoints.Add(GetCenter(pm.cent0, team == Team.A ? pm.cor1 : pm.cor4)); 
-            spawnPoints.Add(GetCenter(pm.cent0, team == Team.A ? pm.cor3 : pm.cor2));
+            spawnPoints.Add(GetCenter(pm.cent0, team == Team.A ? pm.cor1.Value : pm.cor4.Value)); 
+            spawnPoints.Add(GetCenter(pm.cent0, team == Team.A ? pm.cor3.Value : pm.cor2.Value));
         }
         else if (teamCount >= 4)
         {
@@ -128,10 +128,10 @@ public class SpawnPointMaker : MonoBehaviour
             * ├───cent0───┤centR/L
             */
 
-            Vector3 centR = GetCenter(pm.cor3, pm.cor2);
-            Vector3 centL = GetCenter(pm.cor1, pm.cor4);
-            Vector3 corCentR = GetCenter(centR, team == Team.A ? pm.cor3 : pm.cor2);
-            Vector3 corCentL = GetCenter(centL, team == Team.A ? pm.cor1 : pm.cor4);
+            Vector3 centR = GetCenter(pm.cor3.Value, pm.cor2.Value);
+            Vector3 centL = GetCenter(pm.cor1.Value, pm.cor4.Value);
+            Vector3 corCentR = GetCenter(centR, team == Team.A ? pm.cor3.Value : pm.cor2.Value);
+            Vector3 corCentL = GetCenter(centL, team == Team.A ? pm.cor1.Value : pm.cor4.Value);
             Vector3 right = GetCenter(corCentR, team == Team.A ? pm.cent0A : pm.cent0B);
             Vector3 left = GetCenter(corCentL, team == Team.A ? pm.cent0A : pm.cent0B);
             

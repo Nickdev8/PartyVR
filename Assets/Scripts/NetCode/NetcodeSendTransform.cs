@@ -5,41 +5,71 @@ using UnityEngine;
 public class NetcodeSendTransform : NetworkBehaviour
 {
     public Transform modelTransform;
-    public bool sendPosition = true;
-    public bool sendRotation = true;
-    public bool sendScale = false;
-    public bool useGravity = true;
+    [HideInInspector] public bool sendPosition = true;
+    [HideInInspector] public bool sendRotation = true;
+    [HideInInspector] public bool sendScale = false;
+    [HideInInspector] public bool useGravity = true;
+    
+    [HideInInspector] public Vector3 velocity = Vector3.zero; 
 
+    private Team _currentOwnersTeam;
     private Rigidbody _rb;
+    private Vector3 previousPosition;
 
     private void Start()
     {
         _rb = GetComponent<Rigidbody>();
         _rb.isKinematic = true;
         _rb.useGravity = useGravity;
+        
+        previousPosition = modelTransform.position;
+        NetworkManager.Singleton.OnServerStarted += SpawnListOnHost;
     }
 
+    private void SpawnListOnHost()
+    {
+        if (IsHost)
+        {
+            _rb.isKinematic = !useGravity;
+            velocity = Vector3.zero;
+        }
+    }
+    
     public void OnGrab()
     {
         ulong clientId = NetworkManager.Singleton.LocalClientId;
 
         ChangeOwnershipServerRpc(clientId);
         
+        foreach (PlayerNetwork player in FindObjectsOfType<PlayerNetwork>())
+        {
+            _currentOwnersTeam = player.CurrentTeam;
+        }
         _rb.isKinematic = true;
-        UpdateTransformServerRpc(transform.position, transform.rotation, transform.localScale);
     }
 
-    //On Realese
+    // On Release / unselected: set the velocity and allow physics simulation.
     public void OnLettingObjectFallDown()
     {
-        _rb.isKinematic = !useGravity;
-        _rb.velocity = Vector3.zero;
+        if(useGravity)
+        {
+            _rb.isKinematic = false;
+            _rb.velocity = velocity;
+        }
+        else
+        {
+            _rb.isKinematic = true;
+            _rb.velocity = Vector3.zero;
+        }
     }
 
     private void FixedUpdate()
     {
         if (IsOwner)
         {
+            velocity = (transform.position - previousPosition) / Time.fixedDeltaTime;
+            previousPosition = transform.position;
+            
             UpdateTransformServerRpc(transform.position, transform.rotation, transform.localScale);
             UpdateTransformClientRpc(transform.position, transform.rotation, transform.localScale);
             MoveModelToOwnPosition(transform.position, transform.rotation, transform.localScale);
@@ -47,7 +77,6 @@ public class NetcodeSendTransform : NetworkBehaviour
         else
         {
             _rb.isKinematic = true;
-            _rb.velocity = Vector3.zero;
         }
     }
 
@@ -92,7 +121,7 @@ public class NetcodeSendTransform : NetworkBehaviour
         }
     }
 
-    [ServerRpc (RequireOwnership = false)]
+    [ServerRpc(RequireOwnership = false)]
     void ChangeOwnershipServerRpc(ulong newOwnerClientId)
     {
         // Change ownership using the built-in method.

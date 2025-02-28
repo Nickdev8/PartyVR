@@ -8,7 +8,7 @@ using UnityEngine.Serialization;
 
 public class PlayerNetwork : NetworkBehaviour
 {
-    [FormerlySerializedAs("playerLog")] [Header("Game Objects")]
+    [Header("Game Objects")]
     public Logger logger;
     //later also add player nametag for color changes
     
@@ -24,11 +24,18 @@ public class PlayerNetwork : NetworkBehaviour
     
     public void TakeDamage(int damage)
     {
-        health.Value -= damage;
-        if (health.Value <= 0)
+        if (CurrentTeam != Team.Dead)
+        {
+            health.Value -= damage;
+            if (health.Value <= 0)
+            {
+                health.Value = 0;
+                SetTeam(Team.Dead);
+            }
+        }
+        else
         {
             health.Value = 0;
-            SetTeam(Team.Dead);
         }
     }
     

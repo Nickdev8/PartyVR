@@ -14,6 +14,23 @@ public class Debugger : MonoBehaviour
     {
         // _networkObject = GetComponent<NetworkObject>();
     }
+
+
+    [Button]
+    void SpawnRoomColiders()
+    {
+        if (hostList.previewMap.cor1.Value == Vector3.zero || hostList.previewMap.cor2.Value == Vector3.zero || hostList.previewMap.cor3.Value == Vector3.zero || hostList.previewMap.cor4.Value == Vector3.zero)
+            return;
+        
+        foreach (GameObject wall in hostList.roomCollision.currentWalls)
+        {
+            Destroy(wall);
+        }
+        hostList.roomCollision.currentWalls.Clear();
+        
+        hostList.roomCollision.MakeRoomCollisionRpc(
+            hostList.previewMap.cor1.Value, hostList.previewMap.cor2.Value, hostList.previewMap.cor3.Value, hostList.previewMap.cor4.Value);
+    }
     
     [Button]
     void tome()

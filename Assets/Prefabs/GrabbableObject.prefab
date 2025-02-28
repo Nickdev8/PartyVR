@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1020927869331920440}
   - component: {fileID: 4144661761743411613}
   - component: {fileID: 2188816078351412567}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6502383056003639974}
   - component: {fileID: 3239258162960378375}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: PointableUnityEventWrapper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -195,7 +195,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4196495481137574035}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: GrabSource
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -231,7 +231,7 @@ GameObject:
   - component: {fileID: 6979806197483650350}
   - component: {fileID: 6943147873055190462}
   - component: {fileID: 4174577772656320771}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: NetworkiTransform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -294,13 +294,13 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.15, y: 0.15, z: 0.15}
+  m_Size: {x: 0.1, y: 0.1, z: 0.1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &6979806197483650350
 Rigidbody:
@@ -341,7 +341,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3675722395
+  GlobalObjectIdHash: 4286023621
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -367,6 +367,7 @@ MonoBehaviour:
   sendRotation: 1
   sendScale: 0
   useGravity: 1
+  velocity: {x: 0, y: 0, z: 0}
 --- !u!1 &4877979887834180173
 GameObject:
   m_ObjectHideFlags: 0
@@ -377,7 +378,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6131801335830558180}
   - component: {fileID: 1483339247737252018}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Coliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -433,7 +434,7 @@ GameObject:
   - component: {fileID: 802149561939982219}
   - component: {fileID: 3333005941082355763}
   - component: {fileID: 7508152572902095189}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Spatial Audio
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -469,7 +470,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: 6737262b-4fab-4779-a38b-fe74012fa505
-  instanceId: 1c011c00-62ed-4553-ba38-c6a145608283
+  instanceId: 69cb5cb2-f010-4456-9b9f-baed46170135
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: 
@@ -615,7 +616,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4793751907279057662}
-  m_Layer: 0
+  - component: {fileID: 7901544260077422116}
+  m_Layer: 3
   m_Name: GrabbableObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -639,6 +641,23 @@ Transform:
   - {fileID: 1020927869331920440}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7901544260077422116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7698165063918704861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb247cb8e3292084d992f34d82c5ab7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  netcodeSendTransform: {fileID: 4174577772656320771}
+  sendPosition: 1
+  sendRotation: 1
+  sendScale: 0
+  useGravity: 1
 --- !u!1 &8458853625770809956
 GameObject:
   m_ObjectHideFlags: 0
@@ -650,7 +669,7 @@ GameObject:
   - component: {fileID: 1920754191553375074}
   - component: {fileID: 5943723955745763939}
   - component: {fileID: 8406235287757749560}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -785,6 +804,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: ComplexGrabStoneGrabAudio
       objectReference: {fileID: 0}
+    - target: {fileID: 4674537905600659506, guid: dee89f12bd9a82f4cb8de1114b5f0fd7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 7410389675181900697, guid: dee89f12bd9a82f4cb8de1114b5f0fd7,
         type: 3}
       propertyPath: _audioSource
@@ -825,6 +849,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: GrabbablePointable
+      objectReference: {fileID: 0}
+    - target: {fileID: 166896407871925648, guid: cf03cb1ede8bbca49b7020e94b347d64,
+        type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 305911152420270333, guid: cf03cb1ede8bbca49b7020e94b347d64,
         type: 3}

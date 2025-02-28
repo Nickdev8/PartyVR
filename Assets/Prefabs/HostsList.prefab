@@ -179,6 +179,9 @@ MonoBehaviour:
   - sprite: {fileID: 21300000, guid: 5dcd3b2c07805dd4fb0520966c7d9c18, type: 3}
     size: {x: 1, y: 1}
     color: {r: 1, g: 1, b: 1, a: 1}
+  - sprite: {fileID: 21300000, guid: 8d7b1d2c06d260f4eb7c8ce60c8c26a1, type: 3}
+    size: {x: 1, y: 1}
+    color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &6224627712327580547
 GameObject:
   m_ObjectHideFlags: 0
