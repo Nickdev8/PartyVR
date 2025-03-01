@@ -126,5 +126,8 @@ public class NetcodeSendTransform : NetworkBehaviour
     {
         // Change ownership using the built-in method.
         GetComponent<NetworkObject>().ChangeOwnership(newOwnerClientId);
+
+        GrabSettings grabSettings = transform.parent.GetComponent<GrabSettings>();
+        grabSettings.lastOwnerId = newOwnerClientId;
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using SaintsField;
@@ -7,6 +8,7 @@ public class ImageRenderer : MonoBehaviour
     public SpriteRenderer spriteRenderer;
     public CustomImage errorImage;
     public CustomImage[] images;
+    public GameObject background;
 
     // this was for checking if it is the same as the current displaing image
     // private int _displayingIndex;
@@ -14,12 +16,18 @@ public class ImageRenderer : MonoBehaviour
     // private int _displayingBlinkFrom;
     // private int _displayingBlinkTo;
 
+    private void Start()
+    {
+        ClearImage();
+    }
+
     public void ClearImage()
     {
         StopAllCoroutines();
+        background.SetActive(false);
         spriteRenderer.sprite = null;
     }
-    public void BlinkImage(int from, int to, float interval = 0.3f)
+    public void BlinkImage(int from, int to, float time = Mathf.Infinity,  float interval = 0.3f)
     {
         // this was for checking if it is the same as the current displaing image
         // Update the blink range.
@@ -34,7 +42,7 @@ public class ImageRenderer : MonoBehaviour
         // _displayingBlinking = true;
         
         StopAllCoroutines();
-        StartCoroutine(Blink(from, to, interval));
+        StartCoroutine(Blink(from, to, time, interval));
     }
 
     public void ShowImage(int index)
@@ -49,7 +57,10 @@ public class ImageRenderer : MonoBehaviour
         StopAllCoroutines();
         if (images[index] == null)
         {
-            RenderImage(index, true);
+            if (index < 0)
+                RenderImage(index, true);
+            else
+                ClearImage();
         }
         else
         {
@@ -57,7 +68,7 @@ public class ImageRenderer : MonoBehaviour
         }
     }
 
-    private IEnumerator Blink(int from, int to, float interval)
+    private IEnumerator Blink(int from, int to, float time, float interval)
     {
         int currentImageIndex = from;
         
@@ -76,11 +87,20 @@ public class ImageRenderer : MonoBehaviour
                 currentImageIndex = from;
             
             yield return new WaitForSeconds(interval);
+            time -= interval;
+            
+            if (time <= 0)
+            {
+                ClearImage();
+                yield break;
+            }
         }
     }
 
     private void RenderImage(int index, bool error = false)
     {
+        background.SetActive(true);
+        
         if (!error)
         {
             // Ensure the index is valid.

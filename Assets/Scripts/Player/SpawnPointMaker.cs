@@ -33,20 +33,10 @@ public class SpawnPointMaker : MonoBehaviour
     }
 
     private bool _ran;
-    public bool ran {
-        get { return _ran; }
-        set {
-            // Only act if the value really changes
-            if (_ran != value) {
-                _ran = value;
-                hostList.OnSpawnPointRanValueChanged(_ran);
-            }
-        }
-    }
     public bool SpawnSpawnPoint(bool teams = false, int teamCount = -1,  bool reRun = false)
     {
         if (!reRun)
-            if (ran) return false;
+            return false;
         
         if (teamCount == -1)
             teamCount = SceneNetworkManager.Instance.ConnectedClientsCount();
@@ -89,7 +79,6 @@ public class SpawnPointMaker : MonoBehaviour
         // else spawn in a array spread out over the area
 
         SpawnAllPoints(spawnPoints, cent0);
-        ran = true;
         return true;
     }
 

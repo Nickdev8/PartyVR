@@ -18,11 +18,13 @@ public class MinigameManager : MonoBehaviour
     public NetworkVariable<int> onSideA;
     public NetworkVariable<int> onSideB;
     public bool wrongTeamRatio;
+    public bool overrideWrongTeamRatio;
 
     private void Awake() => Instance = this;
 
     public void StartNextGame()
     {
+        overrideWrongTeamRatio = false;
         wrongTeamRatio = false; // resets for next check
         
         if (minigameQueue.Count == 0)
@@ -54,7 +56,6 @@ public class MinigameManager : MonoBehaviour
         }
 
         // Spawn new minigame
-        
         currentMinigame = Instantiate(minigameQueue[0]);
         NetworkObject networkObject = currentMinigame.GetComponent<NetworkObject>();
         SpawnMinigameRpc(networkObject);
@@ -117,13 +118,13 @@ public class MinigameManager : MonoBehaviour
     {
         foreach (PlayerNetwork player in FindObjectsOfType<PlayerNetwork>())
         {
-            var A = PreviewMap.Instance.left.Value;
-            var B = PreviewMap.Instance.right.Value;
+            var a = PreviewMap.Instance.left.Value;
+            var b = PreviewMap.Instance.right.Value;
 
             var playerPos = player.logger.cameraAnchor.position;
             
-            var lineDir = (B - A).normalized;
-            var toPlayer = playerPos - A;
+            var lineDir = (b - a).normalized;
+            var toPlayer = playerPos - a;
 
             float cross = Vector3.Cross(lineDir, toPlayer).y;
 
@@ -142,10 +143,13 @@ public class MinigameManager : MonoBehaviour
 
     public IEnumerator BlinkImageForTeamDivition(SpawnPointMaker spawnPointMaker, ImageRenderer imageRenderer)
     {
-        while (spawnPointMaker.ran)
+        while (true)
         {
             if (currentMinigame == null)
+            {
+                imageRenderer.ShowImage(-1); 
                 yield break;
+            }
             if (currentController.playerModes == PlayerModes.Teams)
             {
                 GetTeamsOnSideRpc(Team.A);
@@ -156,13 +160,18 @@ public class MinigameManager : MonoBehaviour
                 if (Mathf.Approximately(actualRatio, currentController.teamSplitRatio))
                 {
                     wrongTeamRatio = false;
-                    imageRenderer.BlinkImage(); 
+                    imageRenderer.ShowImage(9); 
+                    
                     //do the right image here for if teams are correnct and can continue
+                }
+                else if (overrideWrongTeamRatio)
+                {
+                    imageRenderer.ShowImage(10); 
                 }
                 else
                 {
                     wrongTeamRatio = true;
-                    imageRenderer.BlinkImage();
+                    imageRenderer.BlinkImage(6, 7);
                     //do the right image here for if teams are Not correnct
                 }
 
@@ -173,7 +182,5 @@ public class MinigameManager : MonoBehaviour
             
             yield return new WaitForSeconds(0.1f);
         }
-        
-        yield break;
     }
 }

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 103968801249092902}
   - component: {fileID: 536543907921625429}
   m_Layer: 0
-  m_Name: Base Game
+  m_Name: Dogeball
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3330653545
+  GlobalObjectIdHash: 781074150
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -72,14 +72,33 @@ MonoBehaviour:
   onGameEnd:
     m_PersistentCalls:
       m_Calls: []
+  onGamePaused:
+    m_PersistentCalls:
+      m_Calls: []
+  onGameResumed:
+    m_PersistentCalls:
+      m_Calls: []
+  onScoreUpdated:
+    m_PersistentCalls:
+      m_Calls: []
+  onPlayerJoined:
+    m_PersistentCalls:
+      m_Calls: []
+  onPlayerLeft:
+    m_PersistentCalls:
+      m_Calls: []
   playerModes: 0
   teamSplitRatio: 0.5
-  minimumPlayerCount: 0
+  minimumPlayerCount: 2
   objectSpawnPoints: []
-  spawnableObjects: []
+  spawnableObjects:
+  - {fileID: 4158830366666567623, guid: ff2afb5fa3f5f5a45a71390df4b6565f, type: 3}
   initialisedObjects: []
-  endCondition: 0
+  endCondition: 2
   timeLimit: 0
   teamMinimumGameSize: 0
   maxScore: 0
   currentScore: 0
+  isGameRunning: 0
+  isGamePaused: 0
+  currentTime: 0

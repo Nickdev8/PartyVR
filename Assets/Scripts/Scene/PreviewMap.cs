@@ -148,7 +148,7 @@ public class PreviewMap : NetworkBehaviour
         if (currentHostListPosition == 1) 
         {
             if (_corner1Instance == null)// spawns the prefab on the hand
-                _corner1Instance = hostList.InitializeObjectAtRightHand(corner1Prefab);
+                _corner1Instance = PlayerNetwork.Instance.InitializeObjectAtHand(corner1Prefab, true);
             
             if (_corner2Instance != null) Destroy(_corner2Instance);
             if (_corner3Instance != null) Destroy(_corner3Instance);
@@ -177,7 +177,7 @@ public class PreviewMap : NetworkBehaviour
         else if (currentHostListPosition == 2) 
         {
             if (_corner2Instance == null)// spawns the prefab on the hand
-                _corner2Instance = hostList.InitializeObjectAtRightHand(corner2Prefab);
+                _corner2Instance = PlayerNetwork.Instance.InitializeObjectAtHand(corner2Prefab, true);
             
             if (_corner1Instance != null) Destroy(_corner1Instance);
             
@@ -256,7 +256,7 @@ public class PreviewMap : NetworkBehaviour
     }
     
     [Rpc(SendTo.Everyone)]
-    private void ClearDisplayLinesRpc()
+    public void ClearDisplayLinesRpc()
     {
         foreach (GameObject line in GameObject.FindGameObjectsWithTag("line"))
         {

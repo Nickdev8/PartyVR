@@ -9,6 +9,8 @@ public class GrabSettings : MonoBehaviour
      public bool sendRotation = true;
      public bool sendScale = false;
      public bool useGravity = true;
+     public int damageOnHit = 0;
+     public ulong lastOwnerId;
 
      public void Awake()
      {
